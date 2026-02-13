@@ -1,0 +1,32 @@
+<odoo>
+    <template id="custom_report_styles" inherit_id="web.external_layout">
+        <xpath expr="." position="inside">
+            <style>
+                @page {
+                    size: A4;
+                    margin: 20mm 15mm 30mm 15mm; /* top right bottom left */
+                }
+
+                .footer {
+                    position: fixed;
+                    bottom: 0mm;
+                    left: 0;
+                    right: 0;
+                    height: 20mm;
+                    text-align: center;
+                    font-size: 10px;
+                    border-top: 1px solid #000;
+                    padding-top: 5px;
+                }
+
+                .pageNumber:before {
+                    content: counter(page);
+                }
+
+                .totalPages:before {
+                    content: counter(pages);
+                }
+            </style>
+        </xpath>
+    </template>
+</odoo>

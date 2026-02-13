@@ -1,0 +1,125 @@
+<odoo>
+  <!-- Menu -->
+  <menuitem id="menu_lab_root" name="Lab Reports" sequence="10"/>
+
+  <menuitem id="menu_lab_reports" name="Lab Reports" parent="menu_lab_root" sequence="10"/>
+
+  <!-- Action -->
+  <record id="action_lab_report" model="ir.actions.act_window">
+    <field name="name">Lab Reports</field>
+    <field name="res_model">lab.report</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">
+        Create and manage lab reports.
+      </p>
+    </field>
+  </record>
+
+  <!-- Menu linked to action -->
+  <menuitem id="menu_lab_report_action" name="Lab Reports" parent="menu_lab_reports" action="action_lab_report" sequence="10"/>
+
+  <!-- Tree View -->
+  <record id="view_lab_report_tree" model="ir.ui.view">
+    <field name="name">lab.report.tree</field>
+    <field name="model">lab.report</field>
+    <field name="arch" type="xml">
+      <tree string="Lab Reports">
+        <field name="patient_name"/>
+        <field name="bill_no"/>
+        <field name="bill_date"/>
+        <field name="ref_doctor"/>
+        <field name="gross_value"/>
+        <field name="paid_value"/>
+      </tree>
+    </field>
+  </record>
+
+  <!-- Form View -->
+  <record id="view_lab_report_form" model="ir.ui.view">
+    <field name="name">lab.report.form</field>
+    <field name="model">lab.report</field>
+    <field name="arch" type="xml">
+      <form string="Lab Report">
+        <sheet>
+            <group>
+            <group col="2">
+                <field name="lab_id"/>
+                <field name="organization_name"/>
+            </group>
+            <group col="2">
+                <field name="patient_name"/>
+                <field name="patient_age"/>
+            </group>
+            </group>
+            <group>
+                <group col="2">
+                <field name="patient_gender"/>
+                <field name="patient_mobile"/>
+                <field name="patient_umr"/>
+            </group>
+              <group col="2">
+                  <field name="bill_no"/>
+                  <field name="bill_date"/>
+              </group>
+              <group col="2">
+                  <field name="ref_doctor"/>
+              </group>
+              <group col="2">
+                  <field name="visit_type"/>
+              </group>
+              <group col="2">
+                  <field name="stamp"/>
+                  <field name="signature"/>
+              </group>
+            </group>
+          <notebook>
+            <page string="Services">
+              <field name="services">
+                <tree editable="bottom">
+                  <field name="index"/>
+<!--                  <field name="code"/>-->
+                  <field name="name"/>
+                  <field name="department"/>
+                  <field name="qty"/>
+                  <field name="rate"/>
+                  <field name="disc_value"/>
+                  <field name="sub_total"/>
+                </tree>
+              </field>
+            </page>
+            <page string="Payments">
+              <field name="payments">
+                <tree editable="bottom">
+                  <field name="mode"/>
+                  <field name="amount"/>
+                  <field name="reference"/>
+                </tree>
+              </field>
+            </page>
+          </notebook>
+
+          <group class="oe_right">
+            <field name="gross_value"/>
+            <field name="discount_value"/>
+            <field name="paid_value"/>
+          </group>
+            <group/> <!-- empty -->
+            <group/> <!-- empty -->
+            <group/> <!-- empty -->
+
+            <group col="2">
+                <field name="created_by"/>
+                <field name="printed_by"/>
+            </group>
+            <group col="2">
+                <field name="created_on"/>
+                <field name="printed_on"/>
+            </group>
+
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+</odoo>

@@ -1,0 +1,12 @@
+<odoo>
+  <record id="action_lab_report_receipt" model="ir.actions.report">
+    <field name="name">Lab Report Receipt</field>
+    <field name="model">lab.report</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">auto_generate_lab_receipt.lab_receipt_template</field>
+    <field name="report_file">auto_generate_lab_receipt.lab_receipt_template</field>
+    <field name="print_report_name">'Lab Report Receipt - %s' % (object.patient_name)</field>
+    <field name="binding_model_id" ref="model_lab_report"/>
+    <field name="binding_type">report</field>
+  </record>
+</odoo>

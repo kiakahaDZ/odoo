@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pos_config_cashier,access_pos_config_cashier,point_of_sale.model_pos_config,clinic_patient.group_clinic_cashier,1,0,0,0
+access_pos_order_cashier,access_pos_order_cashier,point_of_sale.model_pos_order,clinic_patient.group_clinic_cashier,1,1,1,0
+access_pos_order_line_cashier,access_pos_order_line_cashier,point_of_sale.model_pos_order_line,clinic_patient.group_clinic_cashier,1,1,1,0
+access_pos_payment_cashier,access_pos_payment_cashier,point_of_sale.model_pos_payment,clinic_patient.group_clinic_cashier,1,1,1,0
+access_pos_session_cashier,access_pos_session_cashier,point_of_sale.model_pos_session,clinic_patient.group_clinic_cashier,1,1,1,0

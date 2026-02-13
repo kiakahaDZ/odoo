@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vue Formulaire Docteur -->
+        <record id="view_clinic_doctor_form" model="ir.ui.view">
+            <field name="name">clinic.doctor.form</field>
+            <field name="model">clinic.doctor</field>
+            <field name="arch" type="xml">
+                <form string="Médecin">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Nom du Médecin"/>
+                            </h1>
+                            <h2>
+                                <field name="code" placeholder="Code (ex: DR001)"/>
+                            </h2>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="specialty"/>
+                                <field name="specialty_other" invisible="specialty != 'other'"/>
+                                <field name="license_number"/>
+                            </group>
+                            <group>
+                                <field name="phone"/>
+                                <field name="mobile"/>
+                                <field name="email"/>
+                                <field name="active" widget="boolean_toggle"/>
+                            </group>
+                        </group>
+                        <group string="Configuration Financière">
+                            <field name="default_commission_rate" widget="percentage"/>
+                        </group>
+                        <notebook>
+                            <page string="Actes Associés">
+                                <field name="medical_act_ids" readonly="1">
+                                    <list string="Actes Médicaux">
+                                        <field name="name"/>
+                                        <field name="list_price"/>
+                                        <field name="medical_act_type"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Notes">
+                                <field name="notes"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vue Liste Docteur -->
+        <record id="view_clinic_doctor_list" model="ir.ui.view">
+            <field name="name">clinic.doctor.list</field>
+            <field name="model">clinic.doctor</field>
+            <field name="arch" type="xml">
+                <list string="Médecins">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="specialty"/>
+                    <field name="phone"/>
+                    <field name="active" widget="boolean_toggle"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Vue Recherche Docteur -->
+        <record id="view_clinic_doctor_search" model="ir.ui.view">
+            <field name="name">clinic.doctor.search</field>
+            <field name="model">clinic.doctor</field>
+            <field name="arch" type="xml">
+                <search string="Rechercher Médecin">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="specialty"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_clinic_doctors" model="ir.actions.act_window">
+            <field name="name">Médecins</field>
+            <field name="res_model">clinic.doctor</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_clinic_doctor_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Créer un nouveau médecin
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

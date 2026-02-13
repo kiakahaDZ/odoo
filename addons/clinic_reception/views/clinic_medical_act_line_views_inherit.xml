@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Étendre la vue formulaire pour ajouter les champs de réception -->
+        <record id="view_clinic_medical_act_line_form_inherit" model="ir.ui.view">
+            <field name="name">clinic.medical.act.line.form.inherit</field>
+            <field name="model">clinic.medical.act.line</field>
+            <field name="inherit_id" ref="clinic_medical_act.view_clinic_medical_act_line_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_date']" position="before">
+                    <field name="reception_id" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

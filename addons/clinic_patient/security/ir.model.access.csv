@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_res_partner_patient_receptionist,access_res_partner_patient_receptionist,base.model_res_partner,group_clinic_receptionist,1,1,1,0
+access_res_partner_patient_cashier,access_res_partner_patient_cashier,base.model_res_partner,group_clinic_cashier,1,0,0,0
+access_res_partner_patient_lab,access_res_partner_patient_lab,base.model_res_partner,group_clinic_lab_tech,1,0,0,0
+access_res_partner_patient_imaging,access_res_partner_patient_imaging,base.model_res_partner,group_clinic_imaging_tech,1,0,0,0
+access_res_partner_patient_manager,access_res_partner_patient_manager,base.model_res_partner,group_clinic_manager,1,1,1,1

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="lab_receipt_template">
+    <t t-call="web.html_container">
+      <t t-call="web.external_layout">
+        <t t-foreach="docs" t-as="doc">
+         <div class="page">
+          <h6 class="text-center">OUT PATIENT RECEIPT</h6>
+            <div class="row" style="border:2px solid black; padding-bottom:1px;display:flex;">
+                  <div class="col-6" style="flex:1; border-right:1px solid black; padding:10px;">
+                      <div class="row">
+                          <div class="col-4" >
+                              <img t-att-src="image_data_uri(doc.lab_id.lab_logo)"
+                                    style="max-height:130px;padding-top:35px" />
+                          </div>
+                          <div class="col-8" style="padding-top:35px">
+                            <strong><span t-field="doc.lab_id.lab_name"/></strong><br/>
+                            <span t-field="doc.lab_id.street"/><br/>
+                            <span t-field="doc.lab_id.street1"/><br/>
+                            <span t-field="doc.lab_id.city"/><br/>
+                            <span t-field="doc.lab_id.state_name"/><br/>
+                            Tel. No: <span t-field="doc.lab_id.lab_tel_no"/><br/>
+                           <strong>GST No: <span t-field="doc.lab_id.gst_no"/></strong>
+                          </div>
+                      </div>
+                </div>
+                <div class="col-6" style="flex:1; padding:10px;">
+                    <table class="table table-sm table-borderless">
+                        <tr>
+                            <td>Name</td>
+                            <td>: <span t-field="doc.patient_name"/></td>
+                        </tr>
+                        <tr>
+                            <td>Age/Gender</td>
+                            <td>: <span t-field="doc.patient_gender"/></td> <!-- Custom field for combined age/gender -->
+                        </tr>
+                        <tr>
+                            <td>Mobile</td>
+                            <td>: <span t-field="doc.patient_mobile"/></td>
+                        </tr>
+                        <tr>
+                            <td>UMR No</td>
+                            <td>: <span t-field="doc.patient_umr"/></td> <!-- Custom field for UMR No -->
+                        </tr>
+                        <tr>
+                            <td>Bill No.</td>
+                            <td>: <span t-field="doc.bill_no"/></td>
+                        </tr>
+                        <tr>
+                            <td>Bill Dt.</td>
+                            <td>: <span t-field="doc.bill_date" t-options='{"widget": "date"}'/></td>
+                        </tr>
+                        <tr>
+                            <td>Visit Type.</td>
+                            <td>: <span t-field="doc.visit_type"/></td>
+                        </tr>
+                        <tr>
+                            <td>Ref Doctor.</td>
+                            <td>: <span t-field="doc.ref_doctor"/></td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+          <br/>
+          <h6 class="text-left">Organisation Name: <span t-field="doc.organization_name"/></h6>
+            <strong>OUT  PATIENT  LAB  TESTS</strong>
+<!--             Health checkup table      -->
+          <table style="border:1px solid #000; border-collapse: collapse; font-size:14px" width="100%">
+            <thead>
+              <tr>
+                <th style="border:1px solid #000;padding:2px">#</th>
+<!--                <th style="border:1px solid #000;padding:2px">Code</th>-->
+                <th style="border:1px solid #000;padding:2px">Service Name</th>
+                <th style="border:1px solid #000;padding:2px">Department</th>
+                <th style="border:1px solid #000;padding:2px">Qty</th>
+                <th style="border:1px solid #000;padding:2px">Rate</th>
+                <th style="border:1px solid #000;padding:2px">Disc(Value)</th>
+                <th style="border:1px solid #000;padding:2px">Sub Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <t t-foreach="doc.services" t-as="service">
+                <tr>
+                  <td style="border:1px solid #000;"><span t-esc="service.index"/></td>
+<!--                  <td style="border:1px solid #000;"><span t-esc="service.code"/></td>-->
+                  <td style="border:1px solid #000;"><span t-esc="service.name"/></td>
+                  <td style="border:1px solid #000;"><span t-esc="service.department"/></td>
+                  <td style="border:1px solid #000;"><span t-esc="service.qty"/></td>
+                  <td style="border:1px solid #000;"><span t-esc="service.rate"/></td>
+                  <td style="border:1px solid #000;"><span t-esc="service.disc_value"/></td>
+                  <td style="border:1px solid #000;"><span t-esc="service.sub_total"/></td>
+                </tr>
+              </t>
+            </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6" style="text-align:left; font-weight:bold; border:1px solid black;">Total</td>
+                        <td style="text-align:left; font-weight:bold; border:1px solid black;">
+                            <span t-esc="doc.total_amount"/>
+                    </td>
+                    </tr>
+                </tfoot>
+          </table>
+         <strong>Payment Mode</strong>
+         <div class="row">
+             <div class="col-6">
+    <!--             Payment mode table-->
+              <table style="width:90%;margin-top:20px; border:1px solid #000; border-collapse: collapse; font-size:15px">
+                <thead>
+                  <tr>
+                    <th style="border:1px solid #000;">#</th>
+                    <th style="border:1px solid #000;padding:5px;">Payment Mode</th>
+                    <th style="border:1px solid #000;padding:5px;">Amount</th>
+                    <th style="border:1px solid #000;padding:5px;">Reference</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <t t-foreach="doc.payments" t-as="pay">
+                    <tr>
+                      <td style="border:1px solid #000;padding:5px;">1</td>
+                      <td style="border:1px solid #000;padding:5px;"><span t-esc="pay.mode"/></td>
+                      <td style="border:1px solid #000;padding:5px;"><span t-esc="pay.amount"/></td>
+                      <td style="border:1px solid #000;padding:5px;"><span t-esc="pay.reference"/></td>
+                    </tr>
+                  </t>
+                </tbody>
+              </table>
+             </div>
+             <div class="col-6" style="text-align:right;">
+    <!--             Gross value table   -->
+              <table style="font-size:16px;margin-top:20px;text-align:left;padding-left:33px;float:right;">
+                <tr>
+                  <td>Gross Value:</td>
+                  <td style="text-align:right;"><strong><span t-field="doc.gross_value"/></strong></td>
+                </tr>
+                <tr>
+                  <td>Discount Value:</td>
+                  <td style="text-align:right;"><strong><span t-field="doc.discount_value"/></strong></td>
+                </tr>
+                <tr>
+                  <td>Paid Value:</td>
+                  <td style="text-align:right;"><strong><span t-field="doc.paid_value"/></strong></td>
+                </tr>
+              </table>
+             </div>
+         </div>
+          <div>
+            <span style="padding-top:53px;">Received with Thanks Rupees <span t-field="doc.amount_in_words"/></span>
+          </div>
+          <br/>
+
+             <!-- Footer -->
+        <div style="padding-top:311px;">
+            <div style="position:relative; width:100%; min-height:200px;">
+
+            <!-- URL at bottom-left -->
+            <div style="position:absolute; bottom:30px; left:50px;">
+                <strong>
+                    <a t-att-href="'https://www.medicoverhospitals.in'"
+                       style="color:black; text-decoration:none;"
+                       target="_blank">
+                       www.medicoverhospitals.in
+                    </a>
+                </strong>
+            </div>
+
+            <!-- Signatory + Stamp + Signature at bottom-right -->
+            <div style="position:absolute; bottom:30px; right:50px; text-align:center;">
+
+                <!-- Overlap container -->
+                <div style="position:relative; width:180px; height:180px; margin:auto;">
+
+                    <!-- Stamp (brighter, behind) -->
+                    <img t-att-src="image_data_uri(doc.stamp)"
+                         style="width:180px; opacity:0.9; position:absolute; top:0; left:0; z-index:1;" />
+
+                    <!-- Signature (on top, slightly transparent) -->
+                    <img t-att-src="image_data_uri(doc.signature)"
+                         style="width:160px; opacity:0.7; position:absolute; top:20px; left:10px; z-index:2;" />
+
+                </div>
+
+                <!-- Authorised Signatory text -->
+                <div style="margin-top:10px; font-size:12px; font-weight:bold;">
+                    (Authorised Signatory)
+                </div>
+            </div>
+            </div>
+            <div class="row" style="border-top:2px solid black;">
+             <div class="col-6">
+                 Created By:: <span t-field="doc.created_by"/><br/>
+                 Printed By:<span t-field="doc.printed_by"/>
+
+             </div>
+             <div class="col-6" style="text-align:right">
+                 Created On:<span t-field="doc.created_on"/><br/>
+                 Printed On:<span t-field="doc.printed_on"/>
+             </div>
+            </div>
+        </div>
+         </div>
+        </t>
+      </t>
+    </t>
+  </template>
+</odoo>

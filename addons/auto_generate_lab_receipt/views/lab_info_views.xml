@@ -1,0 +1,51 @@
+<odoo>
+    <record id="view_lab_information_form" model="ir.ui.view">
+        <field name="name">lab.information.form</field>
+        <field name="model">lab.information</field>
+        <field name="arch" type="xml">
+            <form string="Patient">
+                <sheet>
+                    <group>
+                        <field name="lab_name"/>
+                        <field name="lab_logo"/>
+                        <field name="street"/>
+                        <field name="street1"/>
+                        <field name="city"/>
+                        <field name="state_name"/>
+                        <field name="lab_tel_no"/>
+                        <field name="gst_no"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_information_tree" model="ir.ui.view">
+        <field name="name">lab.information.tree</field>
+        <field name="model">lab.information</field>
+        <field name="arch" type="xml">
+            <tree string="Patient">
+                <field name="lab_name"/>
+                <field name="street"/>
+                <field name="street1"/>
+                <field name="city"/>
+                <field name="state_name"/>
+                <field name="lab_tel_no"/>
+                <field name="gst_no"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_lab_information" model="ir.actions.act_window">
+        <field name="name">Labs</field>
+        <field name="res_model">lab.information</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+
+  <menuitem id="menu_lab_root" name="Lab Information"/>
+  <menuitem id="menu_lab_information" name="Lab Information" parent="menu_lab_root" action="action_lab_information"/>
+
+
+</odoo>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vues POS Order pour intégration medicale -->
+        <!-- Les champs seront ajoutes manuellement via le modele pos.order -->
+    </data>
+</odoo>

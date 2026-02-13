@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Menu Caisse -->
+        <menuitem id="menu_clinic_cashier"
+                  name="Caisse"
+                  parent="clinic_patient.menu_clinic_root"
+                  sequence="30"/>
+
+        <menuitem id="menu_clinic_pos_config"
+                  name="Configuration Caisse"
+                  parent="menu_clinic_cashier"
+                  action="point_of_sale.action_pos_config_kanban"
+                  sequence="10"/>
+
+        <menuitem id="menu_clinic_pos_orders"
+                  name="Commandes"
+                  parent="menu_clinic_cashier"
+                  action="point_of_sale.action_pos_pos_form"
+                  sequence="20"/>
+
+        <menuitem id="menu_clinic_pos_sessions"
+                  name="Sessions"
+                  parent="menu_clinic_cashier"
+                  action="point_of_sale.action_pos_session"
+                  sequence="30"/>
+    </data>
+</odoo>

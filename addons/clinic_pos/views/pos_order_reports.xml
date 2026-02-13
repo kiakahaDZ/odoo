@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vue Graphique - Chiffre d'Affaires Caisse -->
+        <record id="view_pos_order_graph_revenue" model="ir.ui.view">
+            <field name="name">pos.order.graph.revenue</field>
+            <field name="model">pos.order</field>
+            <field name="arch" type="xml">
+                <graph string="Revenus Caisse" type="line">
+                    <field name="date_order" type="row"/>
+                    <field name="amount_total" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- Vue Graphique - États des Commandes -->
+        <record id="view_pos_order_graph_states" model="ir.ui.view">
+            <field name="name">pos.order.graph.states</field>
+            <field name="model">pos.order</field>
+            <field name="arch" type="xml">
+                <graph string="Commandes par État" type="pie">
+                    <field name="state" type="row"/>
+                    <field name="amount_total" type="measure"/>
+                </graph>
+            </field>
+        </record>
+    </data>
+</odoo>
