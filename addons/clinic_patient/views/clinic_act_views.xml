@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ======================================= -->
+        <!-- VUES POUR LES TECHNICIENS (LABO / IMAGERIE) -->
+        <!-- ======================================= -->
+
+        <!-- Vue Liste des Actes (Générique) -->
+        <record id="view_clinic_visit_line_technician_list" model="ir.ui.view">
+            <field name="name">clinic.visit.line.technician.list</field>
+            <field name="model">clinic.visit.line</field>
+            <field name="arch" type="xml">
+                <list string="Actes à Réaliser" editable="bottom" 
+                      create="false" delete="false"
+                      decoration-success="act_state == 'completed'"
+                      decoration-warning="act_state == 'in_progress'"
+                      decoration-muted="act_state == 'cancelled'">
+                    <field name="visit_id" readonly="1"/>
+                    <field name="medical_type" column_invisible="True"/>
+                    <field name="product_id" readonly="1"/>
+                    <field name="description" readonly="1"/>
+                    <field name="act_state" widget="badge" 
+                           decoration-success="act_state == 'completed'"
+                           decoration-info="act_state == 'in_progress'"/>
+                    <field name="result_notes" placeholder="Saisir résultats ici..."/>
+                    <field name="technician_id" widget="many2one_avatar_user"/>
+                    <button name="action_validate_act" type="object" string="Valider" 
+                            class="btn-success btn-sm" icon="fa-check"
+                            invisible="act_state == 'completed'"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Vue Kanban des Actes (Tableau de bord Technicien) -->
+        <record id="view_clinic_visit_line_technician_kanban" model="ir.ui.view">
+            <field name="name">clinic.visit.line.technician.kanban</field>
+            <field name="model">clinic.visit.line</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="act_state" records_draggable="false" create="false" delete="false">
+                    <field name="act_state"/>
+                    <field name="product_id"/>
+                    <field name="visit_id"/>
+                    <templates>
+                        <t t-name="card">
+                            <div class="oe_kanban_global_click">
+                                <div class="o_kanban_card_header">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="visit_id"/>
+                                    </strong>
+                                </div>
+                                <div class="o_kanban_card_content">
+                                    <div><field name="product_id"/></div>
+                                    <div class="text-muted"><field name="description"/></div>
+                                </div>
+                                <div class="o_kanban_card_footer">
+                                    <button name="action_validate_act" type="object" class="btn btn-sm btn-success" 
+                                            invisible="act_state == 'completed'">
+                                        <i class="fa fa-check"/> Valider
+                                    </button>
+                                    <field name="technician_id" widget="many2one_avatar_user"/>
+                                    <field name="act_state" widget="label_selection" 
+                                           options="{'classes': {'pending': 'default', 'in_progress': 'warning', 'completed': 'success'}}"/>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Vue Recherche Actes -->
+        <record id="view_clinic_visit_line_search" model="ir.ui.view">
+            <field name="name">clinic.visit.line.search</field>
+            <field name="model">clinic.visit.line</field>
+            <field name="arch" type="xml">
+                <search string="Rechercher Acte">
+                    <field name="visit_id"/>
+                    <field name="product_id"/>
+                    <filter string="À Faire" name="todo" domain="[('act_state', 'in', ('pending', 'in_progress'))]"/>
+                    <filter string="Terminé" name="done" domain="[('act_state', '=', 'completed')]"/>
+                    <group>
+                        <filter string="Statut" name="group_state" context="{'group_by': 'act_state'}"/>
+                        <filter string="Visite" name="group_visit" context="{'group_by': 'visit_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- ACTIONS Techniciens -->
+        
+        <!-- Action Laboratoire -->
+        <record id="action_clinic_lab_tasks" model="ir.actions.act_window">
+            <field name="name">Laboratoire - Tâches</field>
+            <field name="res_model">clinic.visit.line</field>
+            <field name="view_mode">list,kanban</field>
+            <field name="domain">[('medical_type', '=', 'laboratory'), ('visit_id.is_paid', '=', True)]</field>
+            <field name="context">{'search_default_todo': 1}</field>
+            <field name="view_id" ref="view_clinic_visit_line_technician_list"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Aucun acte de laboratoire en attente
+                </p>
+            </field>
+        </record>
+
+        <!-- Action Imagerie -->
+        <record id="action_clinic_imaging_tasks" model="ir.actions.act_window">
+            <field name="name">Imagerie - Tâches</field>
+            <field name="res_model">clinic.visit.line</field>
+            <field name="view_mode">list,kanban</field>
+            <field name="domain">[('medical_type', '=', 'imaging'), ('visit_id.is_paid', '=', True)]</field>
+            <field name="context">{'search_default_todo': 1}</field>
+            <field name="view_id" ref="view_clinic_visit_line_technician_list"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Aucun acte d'imagerie en attente
+                </p>
+            </field>
+        </record>
+
+        <!-- Action Consultation (Médecins) -->
+        <record id="action_clinic_consultation_tasks" model="ir.actions.act_window">
+            <field name="name">Consultations</field>
+            <field name="res_model">clinic.visit.line</field>
+            <field name="view_mode">list,kanban</field>
+            <field name="domain">[('medical_type', '=', 'consultation'), ('visit_id.is_paid', '=', True)]</field>
+            <field name="context">{'search_default_todo': 1}</field>
+            <field name="view_id" ref="view_clinic_visit_line_technician_list"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Aucune consultation en attente
+                </p>
+            </field>
+        </record>
+
+        <!-- ======================================= -->
+        <!-- SYSTEME POS / CAISSE SIMPLIFIÉE         -->
+        <!-- ======================================= -->
+
+        <!-- Vue Kanban pour le "POS" Caisse -->
+        <record id="view_clinic_pos_kanban" model="ir.ui.view">
+            <field name="name">clinic.visit.pos.kanban</field>
+            <field name="model">clinic.visit</field>
+            <field name="arch" type="xml">
+                <kanban create="false" class="o_kanban_dashboard o_clinic_pos_kanban">
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="patient_id"/>
+                    <field name="total_amount"/>
+                    <field name="currency_id"/>
+                    <field name="state"/>
+                    <field name="payment_method"/>
+                    <templates>
+                        <t t-name="card">
+                            <div class="oe_kanban_global_click container">
+                                <div class="row mb-2">
+                                    <div class="col-8">
+                                        <h3 class="o_kanban_record_title"><field name="patient_id"/></h3>
+                                        <div class="text-muted"><field name="name"/></div>
+                                    </div>
+                                    <div class="col-4 text-end">
+                                        <span class="badge rounded-pill text-bg-warning" 
+                                              invisible="state != 'waiting_payment'">À Payer</span>
+                                        <span class="badge rounded-pill text-bg-success" 
+                                              invisible="state != 'paid'">Payé</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mt-3 border-top pt-2">
+                                    <div class="col-12 text-center">
+                                        <h2 class="text-primary fw-bold">
+                                            <field name="total_amount" widget="monetary"/>
+                                        </h2>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2" invisible="state != 'waiting_payment'">
+                                    <div class="col-12 d-grid">
+                                        <button name="%(clinic_patient.action_clinic_payment_wizard)d" type="action" 
+                                                class="btn btn-lg btn-success">
+                                            <i class="fa fa-money"/> ENCAISSER
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="row mt-2" invisible="state != 'paid'">
+                                    <div class="col-12 text-center text-success">
+                                        <i class="fa fa-check-circle fa-2x"/> <br/>
+                                        Payé par <field name="payment_method"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Action pour le POS -->
+        <record id="action_clinic_pos_system" model="ir.actions.act_window">
+            <field name="name">Terminal Caisse</field>
+            <field name="res_model">clinic.visit</field>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="view_clinic_pos_kanban"/>
+            <field name="domain">[('state', '=', 'waiting_payment')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    La caisse est vide !
+                </p>
+                <p>
+                    Les patients en attente de paiement apparaîtront ici sous forme de cartes.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

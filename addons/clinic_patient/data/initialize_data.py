@@ -111,7 +111,7 @@ def create_base_data(env):
     for name, email in doctors:
         doctor = env['res.partner'].search([
             ('name', '=', name),
-            ('is doctor', '=', True)
+            ('is_doctor', '=', True)
         ], limit=1)
         
         if not doctor:
@@ -130,9 +130,9 @@ def create_base_data(env):
     # 5. Créer patients de test
     print("\n[5] Création patients test...")
     test_patients = [
-        ('Karim Benali', '1985-03-15', 'M', 'O+'),
-        ('Zahra Ameziane', '1992-07-22', 'F', 'AB-'),
-        ('Younes Hamidou', '1978-11-08', 'M', 'A+'),
+        ('Karim Benali', '1985-03-15', 'male', 'o+'),
+        ('Zahra Ameziane', '1992-07-22', 'female', 'ab-'),
+        ('Younes Hamidou', '1978-11-08', 'male', 'a+'),
     ]
     
     for name, birth, gender, blood in test_patients:

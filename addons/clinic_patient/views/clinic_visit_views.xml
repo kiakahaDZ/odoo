@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ======================================= -->
+        <!-- VUES VISITE PATIENT                     -->
+        <!-- ======================================= -->
+
+        <!-- Vue Formulaire Visite -->
+        <record id="view_clinic_visit_form" model="ir.ui.view">
+            <field name="name">clinic.visit.form</field>
+            <field name="model">clinic.visit</field>
+            <field name="arch" type="xml">
+                <form string="Visite Patient">
+                    <header>
+                        <!-- Boutons Workflow -->
+                        <button name="action_reception" string="Réception"
+                                type="object" class="btn-primary"
+                                invisible="state != 'draft'"/>
+                        <button name="action_waiting" string="Salle d'Attente"
+                                type="object" class="btn-primary"
+                                invisible="state != 'reception'"/>
+                        <button name="action_in_progress" string="Début Examen"
+                                type="object" class="btn-primary"
+                                invisible="state != 'waiting'"/>
+                        <button name="action_waiting_results" string="Attente Résultats"
+                                type="object"
+                                invisible="state != 'in_progress'"/>
+                        <button name="action_waiting_payment" string="Envoyer au Paiement"
+                                type="object" class="btn-warning"
+                                invisible="is_paid or state not in ('reception', 'waiting', 'in_progress', 'waiting_results')"/>
+                        <button name="action_pay" string="💰 Encaisser"
+                                type="object" class="btn-success"
+                                groups="clinic_patient.group_clinic_cashier,clinic_patient.group_clinic_manager"
+                                invisible="state != 'waiting_payment'"/>
+                        <button name="action_done" string="✅ Clôturer"
+                                type="object" class="btn-primary"
+                                invisible="state != 'waiting'"/>
+                        <button name="action_refund" string="Rembourser"
+                                type="object" class="btn-danger"
+                                confirm="Voulez-vous vraiment rembourser et annuler le paiement ?"
+                                groups="clinic_patient.group_clinic_manager,clinic_patient.group_clinic_cashier"
+                                invisible="not is_paid"/>
+                        <button name="action_cancel" string="Annuler"
+                                type="object"
+                                invisible="state in ('done', 'cancelled')"/>
+                        <button name="action_reset_draft" string="Remettre en Brouillon"
+                                type="object"
+                                invisible="state not in ('cancelled',)"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,reception,waiting,in_progress,waiting_payment,paid,done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+
+                        <group>
+                            <group string="Informations Visite">
+                                <field name="patient_id"/>
+                                <field name="doctor_id"/>
+                                <field name="visit_date"/>
+                                <field name="visit_type"/>
+                                <field name="orientation"/>
+                            </group>
+                            <group string="Paiement">
+                                <field name="total_amount"/>
+                                <field name="doctor_share"/>
+                                <field name="clinic_share"/>
+                                <field name="is_paid"/>
+                                <field name="payment_method"
+                                       invisible="state not in ('waiting_payment', 'paid', 'done')"/>
+                                <field name="payment_date" readonly="1"
+                                       invisible="not is_paid"/>
+                                <field name="cashier_id" readonly="1"
+                                       invisible="not is_paid"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <group string="Motif">
+                                <field name="reason" placeholder="Motif de la consultation..."/>
+                            </group>
+                            <group string="Diagnostic">
+                                <field name="diagnosis" placeholder="Diagnostic médical..."
+                                       invisible="state in ('draft', 'reception', 'waiting')"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Actes Médicaux">
+                                <field name="visit_line_ids">
+                                    <list editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="description"/>
+                                        <field name="quantity"/>
+                                        <field name="unit_price"/>
+                                        <field name="subtotal"/>
+                                        <field name="doctor_percentage"/>
+                                        <field name="clinic_percentage"/>
+                                        <field name="doctor_amount"/>
+                                        <field name="clinic_amount"/>
+                                        <field name="act_state"/>
+                                        <button name="action_validate_act" type="object" string="Valider" 
+                                                class="btn-success btn-sm" icon="fa-check"
+                                                invisible="act_state == 'completed'"/>
+                                        <field name="technician_id"/>
+                                        <field name="currency_id" column_invisible="1"/>
+                                    </list>
+                                </field>
+                                <group class="oe_subtotal_footer">
+                                    <field name="total_amount" class="oe_subtotal_footer_separator"/>
+                                </group>
+                            </page>
+                            <page string="Résultats &amp; Notes">
+                                <field name="visit_line_ids" readonly="1">
+                                    <list>
+                                        <field name="product_id"/>
+                                        <field name="act_state"/>
+                                        <field name="result_notes"/>
+                                        <field name="technician_id"/>
+                                    </list>
+                                </field>
+                                <separator string="Notes Générales"/>
+                                <field name="notes" placeholder="Notes supplémentaires..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vue Liste Visite -->
+        <record id="view_clinic_visit_list" model="ir.ui.view">
+            <field name="name">clinic.visit.list</field>
+            <field name="model">clinic.visit</field>
+            <field name="arch" type="xml">
+                <list string="Visites" decoration-danger="state == 'waiting_payment'"
+                      decoration-success="state == 'paid'"
+                      decoration-muted="state == 'cancelled'">
+                    <field name="name"/>
+                    <field name="patient_id"/>
+                    <field name="doctor_id"/>
+                    <field name="visit_date"/>
+                    <field name="visit_type"/>
+                    <field name="orientation"/>
+                    <field name="total_amount"/>
+                    <field name="is_paid"/>
+                    <field name="state"/>
+                    <field name="currency_id" column_invisible="1"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Vue Recherche Visite -->
+        <record id="view_clinic_visit_search" model="ir.ui.view">
+            <field name="name">clinic.visit.search</field>
+            <field name="model">clinic.visit</field>
+            <field name="arch" type="xml">
+                <search string="Rechercher Visite">
+                    <field name="name"/>
+                    <field name="patient_id"/>
+                    <field name="doctor_id"/>
+                    <separator/>
+                    <filter name="filter_today" string="Aujourd'hui"
+                            date="visit_date"/>
+                    <separator/>
+                    <filter name="filter_draft" string="Brouillon" domain="[('state','=','draft')]"/>
+                    <filter name="filter_reception" string="Réception" domain="[('state','=','reception')]"/>
+                    <filter name="filter_waiting" string="Salle d'Attente" domain="[('state','=','waiting')]"/>
+                    <filter name="filter_in_progress" string="En Examen" domain="[('state','=','in_progress')]"/>
+                    <filter name="filter_waiting_payment" string="Attente Paiement" domain="[('state','=','waiting_payment')]"/>
+                    <filter name="filter_paid" string="Payé" domain="[('state','=','paid')]"/>
+                    <filter name="filter_done" string="Terminé" domain="[('state','=','done')]"/>
+                    <separator/>
+                    <filter name="filter_unpaid" string="Non Payé" domain="[('is_paid','=',False)]"/>
+                    <group>
+                        <filter name="group_state" string="Statut" context="{'group_by': 'state'}"/>
+                        <filter name="group_patient" string="Patient" context="{'group_by': 'patient_id'}"/>
+                        <filter name="group_doctor" string="Médecin" context="{'group_by': 'doctor_id'}"/>
+                        <filter name="group_type" string="Type" context="{'group_by': 'visit_type'}"/>
+                        <filter name="group_date" string="Date" context="{'group_by': 'visit_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Vue Graphique Visites -->
+        <record id="view_clinic_visit_graph" model="ir.ui.view">
+            <field name="name">clinic.visit.graph</field>
+            <field name="model">clinic.visit</field>
+            <field name="arch" type="xml">
+                <graph string="Statistiques Visites" type="bar">
+                    <field name="visit_type" type="row"/>
+                    <field name="total_amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- Vue Pivot Visites -->
+        <record id="view_clinic_visit_pivot" model="ir.ui.view">
+            <field name="name">clinic.visit.pivot</field>
+            <field name="model">clinic.visit</field>
+            <field name="arch" type="xml">
+                <pivot string="Analyse Visites">
+                    <field name="visit_type" type="row"/>
+                    <field name="state" type="col"/>
+                    <field name="total_amount" type="measure"/>
+                    <field name="doctor_share" type="measure"/>
+                    <field name="clinic_share" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- ======================================= -->
+        <!-- ACTIONS                                 -->
+        <!-- ======================================= -->
+
+        <!-- Action Visites -->
+        <record id="action_clinic_visit" model="ir.actions.act_window">
+            <field name="name">Visites</field>
+            <field name="res_model">clinic.visit</field>
+            <field name="view_mode">list,form,graph,pivot</field>
+            <field name="search_view_id" ref="view_clinic_visit_search"/>
+            <field name="context">{'search_default_filter_today': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Créer une nouvelle visite
+                </p>
+                <p>
+                    Enregistrez les visites patients, suivez le parcours
+                    et gérez les paiements.
+                </p>
+            </field>
+        </record>
+
+        <!-- Action Caisse (Visites en attente de paiement) -->
+        <record id="action_clinic_cashier" model="ir.actions.act_window">
+            <field name="name">Caisse - Paiements</field>
+            <field name="res_model">clinic.visit</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('state', 'in', ('waiting_payment', 'paid'))]</field>
+            <field name="context">{'search_default_filter_waiting_payment': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Aucun paiement en attente
+                </p>
+                <p>
+                    Les visites en attente de paiement apparaîtront ici.
+                </p>
+            </field>
+        </record>
+
+        <!-- Action Médecins -->
+        <record id="action_clinic_doctor" model="ir.actions.act_window">
+            <field name="name">Médecins / Praticiens</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="domain">[('is_doctor', '=', True)]</field>
+            <field name="context">{'default_is_doctor': True}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Ajouter un médecin / praticien
+                </p>
+                <p>
+                    Enregistrez les médecins et praticiens de la clinique.
+                </p>
+            </field>
+        </record>
+
+        <!-- Action Actes Médicaux (Produits) -->
+        <record id="action_clinic_medical_acts" model="ir.actions.act_window">
+            <field name="name">Actes Médicaux</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('is_medical_act', '=', True)]</field>
+            <field name="context">{'default_is_medical_act': True, 'default_type': 'service'}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Ajouter un acte médical
+                </p>
+                <p>
+                    Configurez les actes médicaux (laboratoire, imagerie, etc.)
+                    avec leurs tarifs et répartition financière.
+                </p>
+            </field>
+        </record>
+
+        <!-- Action Rapport Financier -->
+        <record id="action_clinic_financial_report" model="ir.actions.act_window">
+            <field name="name">Rapport Financier</field>
+            <field name="res_model">clinic.visit</field>
+            <field name="view_mode">pivot,graph,list</field>
+            <field name="domain">[('state', 'in', ('paid', 'done'))]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Aucune donnée financière
+                </p>
+                <p>
+                    Les visites payées et clôturées apparaîtront ici avec
+                    la répartition Part Médecin / Part Clinique.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

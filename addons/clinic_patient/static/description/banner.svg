@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="560" height="160" viewBox="0 0 560 160" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bannerBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1B4A7A"/>
+      <stop offset="50%" stop-color="#2D6A4F"/>
+      <stop offset="100%" stop-color="#B8860B"/>
+    </linearGradient>
+    <linearGradient id="goldBanner" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD700"/>
+      <stop offset="100%" stop-color="#DAA520"/>
+    </linearGradient>
+    <pattern id="islamicPatternBanner" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M20 0 L40 20 L20 40 L0 20 Z" stroke="#FFD700" stroke-width="0.3" fill="none" opacity="0.1"/>
+    </pattern>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="560" height="160" fill="url(#bannerBg)"/>
+  <rect width="560" height="160" fill="url(#islamicPatternBanner)"/>
+  
+  <!-- Left side - Logo and Fennec -->
+  <g transform="translate(40, 30)">
+    <!-- Fennec -->
+    <circle cx="50" cy="50" r="25" fill="#F4A460"/>
+    <!-- Ears -->
+    <path d="M30 20 L20 0 L40 20" fill="#FFB347"/>
+    <path d="M70 20 L80 0 L60 20" fill="#FFB347"/>
+    <!-- Eyes -->
+    <circle cx="40" cy="45" r="4" fill="#2C3E50"/>
+    <circle cx="60" cy="45" r="4" fill="#2C3E50"/>
+    <circle cx="41" cy="43" r="1.5" fill="white"/>
+    <circle cx="61" cy="43" r="1.5" fill="white"/>
+    <!-- Nose -->
+    <circle cx="50" cy="55" r="5" fill="#2C3E50"/>
+  </g>
+  
+  <!-- Text and Title -->
+  <g transform="translate(120, 60)">
+    <text x="0" y="0" font-family="Arial" font-size="28" font-weight="bold" fill="white">Clinic Patient</text>
+    <text x="0" y="40" font-family="Arial" font-size="28" font-weight="bold" fill="white">Management</text>
+    <text x="0" y="75" font-family="Arial" font-size="16" fill="#FFD700">الجزائر - Fennec Healthcare</text>
+  </g>
+  
+  <!-- Islamic Medical Symbols -->
+  <g transform="translate(400, 60)">
+    <!-- Crescent -->
+    <path d="M0 0 A20 20 0 1 1 15 -15" stroke="#FFD700" stroke-width="3" fill="none"/>
+    <!-- Star -->
+    <path d="M30 20 L33 27 L40 27 L35 32 L37 40 L30 35 L23 40 L25 32 L20 27 L27 27 Z" 
+          fill="#FFD700" transform="scale(0.8)"/>
+    <!-- Staff -->
+    <rect x="60" y="0" width="3" height="40" rx="1.5" fill="#FFD700"/>
+    <path d="M57 5 Q53 10 57 15 Q61 20 57 25 Q53 30 57 35" stroke="#2D6A4F" stroke-width="2" fill="none"/>
+  </g>
+  
+  <!-- Decorative Border -->
+  <rect x="10" y="10" width="540" height="140" fill="none" stroke="#FFD700" stroke-width="2" stroke-opacity="0.3" rx="10"/>
+  
+  <!-- Algerian Star and Crescent -->
+  <g transform="translate(520, 130)">
+    <path d="M0 0 A10 10 0 1 1 8 -8" stroke="#FF0000" stroke-width="2" fill="none" opacity="0.5"/>
+    <path d="M25 5 L27 9 L31 9 L28 12 L30 17 L25 14 L20 17 L22 12 L19 9 L23 9 Z" fill="#FF0000" opacity="0.3"/>
+  </g>
+</svg>

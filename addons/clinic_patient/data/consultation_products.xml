@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Catégorie Consultation -->
+        <record id="product_category_consultation" model="product.category">
+            <field name="name">Consultations</field>
+        </record>
+
+        <!-- Consultation Généraliste -->
+        <record id="product_consultation_generaliste" model="product.template">
+            <field name="name">Consultation Généraliste</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_consultation"/>
+            <field name="list_price">1500.00</field>
+            <field name="is_medical_act">True</field>
+            <field name="medical_act_type">consultation</field>
+            <field name="service_type">consultation</field>
+            <field name="doctor_share_percentage">100.0</field>
+            <field name="clinic_share_percentage">0.0</field>
+        </record>
+
+        <!-- Consultation Spécialisée -->
+        <record id="product_consultation_specialiste" model="product.template">
+            <field name="name">Consultation Spécialisée</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_consultation"/>
+            <field name="list_price">2500.00</field>
+            <field name="is_medical_act">True</field>
+            <field name="medical_act_type">consultation</field>
+            <field name="service_type">consultation</field>
+            <field name="doctor_share_percentage">100.0</field>
+            <field name="clinic_share_percentage">0.0</field>
+        </record>
+    </data>
+</odoo>

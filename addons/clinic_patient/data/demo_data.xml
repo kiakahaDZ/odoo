@@ -7,12 +7,12 @@
         
         <record id="product_category_laboratory" model="product.category">
             <field name="name">Actes Laboratoire</field>
-            <field name="parent_id" ref="product.product_category_all"/>
+
         </record>
 
         <record id="product_category_imaging" model="product.category">
             <field name="name">Actes Imagerie</field>
-            <field name="parent_id" ref="product.product_category_all"/>
+
         </record>
 
         <!-- ============================= -->
@@ -22,7 +22,7 @@
         <!-- Prise de sang -->
         <record id="product_prise_de_sang" model="product.template">
             <field name="name">Prise de sang</field>
-            <field name="description">Analyse sanguine complète</field>
+            <field name="description">Analyse sanguine complete</field>
             <field name="type">service</field>
             <field name="categ_id" ref="product_category_laboratory"/>
             <field name="list_price">1000.00</field>
@@ -172,7 +172,7 @@
             <field name="is_patient">True</field>
             <field name="date_of_birth">1985-03-15</field>
             <field name="gender">male</field>
-            <field name="blood_group">O+</field>
+            <field name="blood_group">o+</field>
             <field name="phone">0661122334</field>
             <field name="street">Rue Ali Kafi</field>
             <field name="city">Alger</field>
@@ -183,7 +183,7 @@
             <field name="is_patient">True</field>
             <field name="date_of_birth">1992-07-22</field>
             <field name="gender">female</field>
-            <field name="blood_group">AB-</field>
+            <field name="blood_group">ab-</field>
             <field name="phone">0661122335</field>
             <field name="street">Boulevard Didouche Mourad</field>
             <field name="city">Alger</field>
@@ -194,7 +194,7 @@
             <field name="is_patient">True</field>
             <field name="date_of_birth">1978-11-08</field>
             <field name="gender">male</field>
-            <field name="blood_group">A+</field>
+            <field name="blood_group">a+</field>
             <field name="phone">0661122336</field>
             <field name="street">Rue Hassiba Ben Bouali</field>
             <field name="city">Alger</field>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vue Formulaire Acte (Détail) -->
+        <record id="view_clinic_visit_line_form" model="ir.ui.view">
+            <field name="name">clinic.visit.line.form</field>
+            <field name="model">clinic.visit.line</field>
+            <field name="arch" type="xml">
+                <form string="Acte Médical" create="false" delete="false">
+                    <header>
+                        <button name="action_validate_act" type="object" string="Valider l'Acte"
+                                class="btn-primary" 
+                                invisible="act_state == 'completed'"/>
+                        <field name="act_state" widget="statusbar" statusbar_visible="pending,in_progress,completed"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="visit_id" readonly="1"/>
+                                <field name="product_id" readonly="1"/>
+                                <field name="medical_type" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="technician_id" readonly="1"/>
+                                <field name="quantity" readonly="1"/>
+                                <field name="act_state" invisible="1"/>
+                            </group>
+                        </group>
+                        <group string="Résultats">
+                            <field name="result_notes" placeholder="Saisir les observations ou résultats ici..."/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient with Islamic geometric inspiration -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1B4A7A">
+        <animate attributeName="stop-color" values="#1B4A7A;#0F3B5E;#1B4A7A" dur="4s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="50%" stop-color="#2D6A4F">
+        <animate attributeName="stop-color" values="#2D6A4F;#1E4D3A;#2D6A4F" dur="4s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="100%" stop-color="#B8860B">
+        <animate attributeName="stop-color" values="#B8860B;#8B6508;#B8860B" dur="4s" repeatCount="indefinite" />
+      </stop>
+    </linearGradient>
+    
+    <linearGradient id="fennecGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFB347"/>
+      <stop offset="100%" stop-color="#FF8C42"/>
+    </linearGradient>
+    
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD700">
+        <animate attributeName="stop-color" values="#FFD700;#DAA520;#FFD700" dur="3s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="100%" stop-color="#DAA520"/>
+    </linearGradient>
+    
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="shadow">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+    
+    <!-- Islamic geometric pattern -->
+    <pattern id="islamicPattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M20 0 L40 20 L20 40 L0 20 Z" stroke="#FFD700" stroke-width="0.5" fill="none" opacity="0.1"/>
+      <circle cx="20" cy="20" r="8" stroke="#FFD700" stroke-width="0.5" fill="none" opacity="0.1"/>
+    </pattern>
+  </defs>
+  
+  <!-- Background with Islamic pattern -->
+  <circle cx="100" cy="100" r="95" fill="url(#bgGradient)" filter="url(#shadow)"/>
+  <circle cx="100" cy="100" r="90" fill="url(#islamicPattern)" opacity="0.3"/>
+  
+  <!-- Decorative Islamic border (8-pointed star - common in Islamic art) -->
+  <path d="M100 15 L115 40 L140 40 L120 60 L130 85 L100 72 L70 85 L80 60 L60 40 L85 40 Z" 
+        fill="url(#goldGradient)" opacity="0.2" transform="rotate(0, 100, 100)"/>
+  
+  <!-- Fennec Fox - Main element -->
+  <g filter="url(#glow)">
+    <!-- Body (as a patient/caring shape) -->
+    <ellipse cx="100" cy="105" rx="30" ry="25" fill="#F4A460"/>
+    
+    <!-- Head -->
+    <circle cx="100" cy="80" r="20" fill="#F4A460"/>
+    
+    <!-- Large ears (fennec characteristic) -->
+    <path d="M82 55 L70 30 L92 48" fill="url(#fennecGradient)">
+      <animate attributeName="d" values="M82 55 L70 30 L92 48;M82 58 L70 33 L92 51;M82 55 L70 30 L92 48" dur="2s" repeatCount="indefinite" />
+    </path>
+    <path d="M118 55 L130 30 L108 48" fill="url(#fennecGradient)">
+      <animate attributeName="d" values="M118 55 L130 30 L108 48;M118 58 L130 33 L108 51;M118 55 L130 30 L108 48" dur="2s" repeatCount="indefinite" />
+    </path>
+    
+    <!-- Inner ear (pink) -->
+    <ellipse cx="76" cy="46" rx="5" ry="8" fill="#FFB6C1" opacity="0.7"/>
+    <ellipse cx="124" cy="46" rx="5" ry="8" fill="#FFB6C1" opacity="0.7"/>
+    
+    <!-- Face details -->
+    <circle cx="90" cy="75" r="3" fill="#2C3E50"/>
+    <circle cx="110" cy="75" r="3" fill="#2C3E50"/>
+    <!-- Eye shine -->
+    <circle cx="91" cy="73" r="1" fill="white"/>
+    <circle cx="111" cy="73" r="1" fill="white"/>
+    
+    <!-- Nose (cute black nose) -->
+    <circle cx="100" cy="85" r="4" fill="#2C3E50"/>
+  </g>
+  
+  <!-- Islamic Medical Symbol - Crescent and Star (instead of cross) -->
+  <g transform="translate(100, 135)">
+    <!-- Crescent moon (symbol of Islamic medicine) -->
+    <path d="M-15 -5 A20 20 0 1 1 5 -15" stroke="url(#goldGradient)" stroke-width="4" fill="none">
+      <animate attributeName="stroke-width" values="4;5;4" dur="2s" repeatCount="indefinite" />
+    </path>
+    
+    <!-- Star (8-pointed star - Islamic geometric pattern) -->
+    <g transform="translate(0, -5)">
+      <path d="M0 -12 L3 -4 L12 -4 L5 2 L8 12 L0 7 L-8 12 L-5 2 L-12 -4 L-3 -4 Z" 
+            fill="url(#goldGradient)" opacity="0.8" transform="scale(0.8)">
+        <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="20s" repeatCount="indefinite"/>
+      </path>
+    </g>
+  </g>
+  
+  <!-- Medical Staff of Asclepius (alternative to cross) - Snake and staff -->
+  <g transform="translate(70, 115)" opacity="0.9">
+    <!-- Staff -->
+    <rect x="25" y="10" width="3" height="35" rx="1.5" fill="url(#goldGradient)"/>
+    
+    <!-- Snake wrapping around staff -->
+    <path d="M22 15 Q18 20 22 25 Q26 30 22 35 Q18 40 22 45" 
+          stroke="#2D6A4F" stroke-width="2.5" fill="none">
+      <animate attributeName="d" values="M22 15 Q18 20 22 25 Q26 30 22 35 Q18 40 22 45;
+                                         M22 15 Q20 20 22 25 Q24 30 22 35 Q20 40 22 45;
+                                         M22 15 Q18 20 22 25 Q26 30 22 35 Q18 40 22 45" 
+               dur="3s" repeatCount="indefinite"/>
+    </path>
+    <!-- Snake head -->
+    <circle cx="21" cy="14" r="2.5" fill="#2D6A4F"/>
+    <circle cx="19.5" cy="13" r="0.5" fill="white"/>
+  </g>
+  
+  <!-- Patient/Heart symbol (representing care) -->
+  <g transform="translate(130, 145)">
+    <path d="M0 0 L5 -8 L10 0 L5 8 Z" fill="#FF6B6B" opacity="0.7" transform="rotate(45)">
+      <animate attributeName="opacity" values="0.7;0.9;0.7" dur="2s" repeatCount="indefinite" />
+    </path>
+  </g>
+  
+  <!-- Arabic/Islamic calligraphy influence (stylized) -->
+  <path d="M45 170 Q55 165 65 170 Q75 175 85 170" stroke="#FFD700" stroke-width="2" fill="none" opacity="0.5"/>
+  <path d="M115 170 Q125 165 135 170 Q145 175 155 170" stroke="#FFD700" stroke-width="2" fill="none" opacity="0.5"/>
+  
+  <!-- Algerian elements -->
+  <!-- Crescent (Algerian flag) -->
+  <path d="M40 40 A15 15 0 1 1 50 25" stroke="#FF0000" stroke-width="2" fill="none" opacity="0.4"/>
+  <!-- Star (Algerian flag) -->
+  <path d="M45 30 L47 34 L51 34 L48 37 L50 41 L45 38 L40 41 L42 37 L39 34 L43 34 Z" fill="#FF0000" opacity="0.3"/>
+  
+  <!-- Fennec footprint (playful element) -->
+  <g transform="translate(160, 60)" opacity="0.3">
+    <circle cx="0" cy="0" r="3" fill="#8B4513"/>
+    <circle cx="5" cy="-3" r="2" fill="#8B4513"/>
+    <circle cx="-5" cy="-3" r="2" fill="#8B4513"/>
+  </g>
+</svg>
