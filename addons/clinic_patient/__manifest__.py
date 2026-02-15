@@ -50,6 +50,7 @@
         'security/clinic_patient_security.xml',
         'security/ir.model.access.csv',
         'data/patient_sequence.xml',
+        'report/clinic_receipt_report.xml',
         'views/clinic_patient_views.xml',
         'views/clinic_visit_views.xml',
         'wizard/clinic_payment_wizard_views.xml',

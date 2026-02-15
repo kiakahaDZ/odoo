@@ -15,7 +15,8 @@
         <menuitem id="menu_clinic_reception"
                   name="Réception"
                   parent="menu_clinic_root"
-                  sequence="10"/>
+                  sequence="10"
+                  groups="group_clinic_receptionist,group_clinic_manager"/>
 
         <menuitem id="menu_clinic_patient_list"
                   name="Patients"
@@ -41,7 +42,8 @@
         <menuitem id="menu_clinic_cashier"
                   name="Caisse"
                   parent="menu_clinic_root"
-                  sequence="20"/>
+                  sequence="20"
+                  groups="group_clinic_cashier,group_clinic_financial,group_clinic_manager"/>
 
         <menuitem id="menu_clinic_pos_terminal"
                   name="Terminal Point de Vente"
@@ -55,13 +57,21 @@
                   action="clinic_patient.action_clinic_cashier"
                   sequence="10"/>
 
+        <menuitem id="menu_clinic_refunds"
+                  name="Remboursements"
+                  parent="menu_clinic_cashier"
+                  action="clinic_patient.action_clinic_refunds"
+                  sequence="20"
+                  groups="group_clinic_cashier,group_clinic_manager"/>
+
         <!-- ======================================= -->
         <!-- CONSULTATIONS                           -->
         <!-- ======================================= -->
         <menuitem id="menu_clinic_consultations"
                   name="Consultations"
                   parent="menu_clinic_root"
-                  sequence="30"/>
+                  sequence="30"
+                  groups="group_clinic_doctor,group_clinic_manager"/>
 
         <menuitem id="menu_clinic_consultations_tasks"
                   name="Mes Consultations"
@@ -75,7 +85,8 @@
         <menuitem id="menu_clinic_lab"
                   name="Laboratoire"
                   parent="menu_clinic_root"
-                  sequence="40"/>
+                  sequence="40"
+                  groups="group_clinic_lab_tech,group_clinic_manager"/>
 
         <menuitem id="menu_clinic_lab_tasks"
                   name="Tâches / Analyses"
@@ -89,7 +100,8 @@
         <menuitem id="menu_clinic_imaging"
                   name="Imagerie"
                   parent="menu_clinic_root"
-                  sequence="50"/>
+                  sequence="50"
+                  groups="group_clinic_imaging_tech,group_clinic_manager"/>
 
         <menuitem id="menu_clinic_imaging_tasks"
                   name="Tâches / Examens"
@@ -103,7 +115,8 @@
         <menuitem id="menu_clinic_medical"
                   name="Services Médicaux"
                   parent="menu_clinic_root"
-                  sequence="60"/>
+                  sequence="60"
+                  groups="group_clinic_manager"/>
 
         <menuitem id="menu_clinic_medical_visits"
                   name="Toutes les Visites"
@@ -124,7 +137,7 @@
                   name="Configuration"
                   parent="menu_clinic_root"
                   sequence="90"
-                  groups="group_clinic_manager,base.group_system"/>
+                  groups="group_clinic_manager,base.group_system,group_clinic_cashier,group_clinic_financial"/>
 
         <menuitem id="menu_clinic_medical_acts"
                   name="Actes Médicaux (Tarifs)"
@@ -139,7 +152,7 @@
                   name="Rapports"
                   parent="menu_clinic_root"
                   sequence="80"
-                  groups="group_clinic_manager,base.group_system"/>
+                  groups="group_clinic_manager,base.group_system,group_clinic_financial,group_clinic_cashier"/>
 
         <menuitem id="menu_clinic_financial_report"
                   name="Rapport Financier"

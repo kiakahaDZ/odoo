@@ -2,6 +2,7 @@
 
 from odoo import models, fields, api
 from odoo.exceptions import UserError, ValidationError, AccessError
+from odoo.tools.misc import formatLang
 
 
 class ClinicVisit(models.Model):
@@ -147,6 +148,47 @@ class ClinicVisit(models.Model):
     )
 
     # ==========================================
+    # HELPERS POUR TICKET (IMPRIMANTE THERMIQUE)
+    # Libellés et montants en ASCII pour éviter les problèmes d'encodage
+    # ==========================================
+
+    def get_receipt_payment_label(self):
+        """Libellé mode de paiement pour ticket imprimante (sans accents)."""
+        self.ensure_one()
+        labels = {
+            'cash': 'Especes',
+            'bank': 'Virement Bancaire',
+            'check': 'Cheque',
+            'insurance': 'Assurance / Tiers Payant',
+        }
+        return labels.get(self.payment_method or '', '')
+
+    def get_receipt_payment_label_display(self):
+        """Libellé mode de paiement avec accents (pour aperçu écran)."""
+        self.ensure_one()
+        labels = {
+            'cash': 'Espèces',
+            'bank': 'Virement Bancaire',
+            'check': 'Chèque',
+            'insurance': 'Assurance / Tiers Payant',
+        }
+        return labels.get(self.payment_method or '', '')
+
+    def get_receipt_amount_formatted(self, amount):
+        """Montant formaté pour ticket (devise en lettres, pas de symbole spécial)."""
+        self.ensure_one()
+        currency = self.currency_id or self.env.company.currency_id
+        return formatLang(self.env, amount, currency_obj=currency)
+
+    def get_receipt_date_formatted(self):
+        """Date/heure formatée pour ticket."""
+        self.ensure_one()
+        dt = self.payment_date or self.visit_date
+        if not dt:
+            return ''
+        return dt.strftime('%d/%m/%Y %H:%M')
+
+    # ==========================================
     # NOTES
     # ==========================================
     notes = fields.Text(
@@ -233,6 +275,23 @@ class ClinicVisit(models.Model):
         })
         # Mettre les actes en cours automatiquement
         self.visit_line_ids.filtered(lambda l: l.act_state == 'pending').write({'act_state': 'in_progress'})
+        
+        # Imprimer automatiquement le ticket de caisse après paiement
+        return self.action_print_receipt()
+
+    def action_print_receipt(self):
+        """Imprimer le ticket de caisse (PDF pour imprimante thermique)."""
+        self.ensure_one()
+        if not self.is_paid:
+            raise UserError("Le paiement doit être effectué avant d'imprimer le ticket.")
+        return self.env.ref('clinic_patient.action_clinic_receipt_report').report_action(self, config=False)
+
+    def action_preview_receipt(self):
+        """Ouvrir l'aperçu du ticket dans le navigateur (comme POS)."""
+        self.ensure_one()
+        if not self.is_paid:
+            raise UserError("Le paiement doit être effectué avant de voir le ticket.")
+        return self.env.ref('clinic_patient.action_clinic_receipt_preview').report_action(self, config=False)
 
     def action_refund(self):
         """Remboursement et retour en attente de paiement"""

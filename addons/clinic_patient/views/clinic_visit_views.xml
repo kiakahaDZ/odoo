@@ -40,6 +40,12 @@
                                 confirm="Voulez-vous vraiment rembourser et annuler le paiement ?"
                                 groups="clinic_patient.group_clinic_manager,clinic_patient.group_clinic_cashier"
                                 invisible="not is_paid"/>
+                        <button name="action_preview_receipt" string="Voir le ticket"
+                                type="object" class="btn-secondary"
+                                invisible="not is_paid"/>
+                        <button name="action_print_receipt" string="Imprimer ticket"
+                                type="object" class="btn-secondary"
+                                invisible="not is_paid"/>
                         <button name="action_cancel" string="Annuler"
                                 type="object"
                                 invisible="state in ('done', 'cancelled')"/>
@@ -244,7 +250,7 @@
 
         <!-- Action Caisse (Visites en attente de paiement) -->
         <record id="action_clinic_cashier" model="ir.actions.act_window">
-            <field name="name">Caisse - Paiements</field>
+            <field name="name">Caisse - Transactions</field>
             <field name="res_model">clinic.visit</field>
             <field name="view_mode">list,form</field>
             <field name="domain">[('state', 'in', ('waiting_payment', 'paid'))]</field>
@@ -255,6 +261,23 @@
                 </p>
                 <p>
                     Les visites en attente de paiement apparaîtront ici.
+                </p>
+            </field>
+        </record>
+
+        <!-- Action Remboursements -->
+        <record id="action_clinic_refunds" model="ir.actions.act_window">
+            <field name="name">Remboursements</field>
+            <field name="res_model">clinic.visit</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('is_paid', '=', True)]</field>
+            <field name="context">{'create': False}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Aucune transaction éligible au remboursement
+                </p>
+                <p>
+                    Sélectionnez une visite payée pour effectuer un remboursement.
                 </p>
             </field>
         </record>
