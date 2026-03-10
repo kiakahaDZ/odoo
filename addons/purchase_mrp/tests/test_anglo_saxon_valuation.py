@@ -213,6 +213,61 @@ class TestAngloSaxonValuationPurchaseMRP(TestStockValuationCommon):
         self.assertEqual(input_aml.amount_currency, 100)  # EUR
         self.assertEqual(input_aml.balance, 50)  # USD
 
+    def test_multicurrency_kit_different_uom_categories(self):
+        """
+            Create a kit with an UoM belonging to a different category than its component UoM.
+            Purchase that kit in a different currency than the company currency and validate the receipt.
+            Check the generated account entries.
+        """
+        eur = self.env.ref('base.EUR')
+
+        uom_unit = self.env.ref('uom.product_uom_unit')
+        uom_meter = self.env.ref('uom.product_uom_meter')
+
+        kit, component = self.env['product.product'].create([
+            {
+                'name': 'Kit multi UoM',
+                'is_storable': True,
+                'uom_id': uom_unit.id,
+                'categ_id': self.category_avco_auto.id,
+            },
+            {
+                'name': 'Component meter',
+                'is_storable': True,
+                'uom_id': uom_meter.id,
+                'categ_id': self.category_avco_auto.id,
+            },
+        ])
+
+        self.env['mrp.bom'].create({
+            'product_tmpl_id': kit.product_tmpl_id.id,
+            'product_uom_id': uom_unit.id,
+            'product_qty': 1.0,
+            'type': 'phantom',
+            'bom_line_ids': [Command.create({
+                'product_id': component.id,
+                'product_qty': 1.0,
+                'product_uom_id': uom_meter.id,
+            })],
+        })
+
+        po = self.env['purchase.order'].create({
+            'partner_id': self.vendor.id,
+            'currency_id': eur.id,
+            'order_line': [Command.create({
+                'product_id': kit.id,
+                'product_qty': 1.0,
+                'product_uom_id': kit.uom_id.id,
+                'price_unit': 100.0,
+            })],
+        })
+        po.button_confirm()
+
+        receipt = po.picking_ids
+        receipt.button_validate()
+
+        self.assertEqual(receipt.move_ids.state, 'done')
+
     @skip('Temporary to fast merge new valuation')
     def test_fifo_cost_adjust_mo_quantity(self):
         """ An MO using a FIFO cost method product as a component should not zero-out the std cost
@@ -444,7 +499,7 @@ class TestAngloSaxonValuationPurchaseMRP(TestStockValuationCommon):
         self.assertEqual(sum(purchase_order.order_line.move_ids.mapped('cost_share')), 100.0)
         receipt = purchase_order.picking_ids
         receipt.button_validate()
-        self.assertRecordValues(receipt.move_ids.sorted(lambda m: (m.product_id.id, m.cost_share)), [
+        expected_values = [
             {'product_id': component01.id, 'cost_share': 3.33, 'value': 33.3},
             {'product_id': component02.id, 'cost_share': 3.33, 'value': 33.3},
             {'product_id': component02.id, 'cost_share': 10.0, 'value': 100.0},
@@ -456,7 +511,15 @@ class TestAngloSaxonValuationPurchaseMRP(TestStockValuationCommon):
             {'product_id': component05.id, 'cost_share': 0.0, 'value': 0.0},
             {'product_id': component05.id, 'cost_share': 10.0, 'value': 100.0},
             {'product_id': component05.id, 'cost_share': 15.0, 'value': 150.0},
-        ])
+        ]
+        self.assertRecordValues(receipt.move_ids.sorted(lambda m: (m.product_id.id, m.cost_share)), expected_values)
+
+        move_form = Form(self.env['account.move'].with_context(default_move_type='in_invoice'))
+        move_form.purchase_vendor_bill_id = self.env['purchase.bill.union'].browse(-purchase_order.id)
+        move_form.invoice_date = Datetime.today()
+        move = move_form.save()
+        move.action_post()
+        self.assertRecordValues(receipt.move_ids.sorted(lambda m: (m.product_id.id, m.cost_share)), expected_values)
 
     def test_kit_bom_cost_share_constraint_with_variants(self):
         """

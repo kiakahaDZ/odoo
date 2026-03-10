@@ -62,8 +62,12 @@ class AccountEdiXmlUBLHR(models.AbstractModel):
         })
         return nsmap
 
-    def _export_invoice_constraints_new(self, invoice, vals):
-        constraints = super()._export_invoice_constraints_new(invoice, vals)
+    def _export_invoice_constraints(self, invoice, vals):
+        # OVERRIDE 'account.edi.xml.ubl_bis3': don't apply Peppol rules
+        constraints = self.env['account.edi.xml.ubl_20']._export_invoice_constraints(invoice, vals)
+        constraints.update(
+            self._invoice_constraints_cen_en16931_ubl(invoice, vals)
+        )
         constraints.update(
             self._invoice_constraints_eracun_new(invoice, vals)
         )
@@ -242,34 +246,44 @@ class AccountEdiXmlUBLHR(models.AbstractModel):
             }
         })
 
+    def _ubl_add_party_endpoint_id_node(self, vals):
+        # EXTENDS account.edi.ubl_bis3
+        super()._ubl_add_party_endpoint_id_node(vals)
+        partner = vals['party_vals']['partner']
+        commercial_partner = partner.commercial_partner_id
+        if commercial_partner.l10n_hr_personal_oib:
+            ident = commercial_partner.l10n_hr_personal_oib
+            scheme = '9934'
+        elif commercial_partner.company_registry:
+            ident = commercial_partner.company_registry
+            scheme = '0088'
+        else:
+            ident = commercial_partner.vat.strip('HR')
+            scheme = '9934'
+        vals['party_node']['cbc:EndpointID']['_text'] = ident
+        vals['party_node']['cbc:EndpointID']['schemeID'] = scheme
+
     def _ubl_add_party_identification_nodes(self, vals):
         # EXTENDS account.edi.ubl_bis3
         super()._ubl_add_party_identification_nodes(vals)
         partner = vals['party_vals']['partner']
         commercial_partner = partner.commercial_partner_id
-
+        if commercial_partner.l10n_hr_business_unit_code:
+            bu_code = '::HR99:' + commercial_partner.l10n_hr_business_unit_code
+        else:
+            bu_code = ''
         if commercial_partner.l10n_hr_personal_oib:
-            if commercial_partner.l10n_hr_business_unit_code:
-                vals['party_node']['cac:PartyIdentification'] = [{
-                    'cbc:ID': {
-                        '_text': f'9934:{commercial_partner.l10n_hr_personal_oib}::HR99:{commercial_partner.l10n_hr_business_unit_code}',
-                        'schemeID': None,
-                    },
-                }]
-            else:
-                vals['party_node']['cac:PartyIdentification'] = [{
-                    'cbc:ID': {
-                        '_text': f'9934:{commercial_partner.l10n_hr_personal_oib}',
-                        'schemeID': None,
-                    },
-                }]
+            ident = '9934:' + commercial_partner.l10n_hr_personal_oib + bu_code
         elif commercial_partner.company_registry:
-            vals['party_node']['cac:PartyIdentification'] = [{
-                'cbc:ID': {
-                    '_text': f'0088:{commercial_partner.company_registry}',
-                    'schemeID': None,
-                },
-            }]
+            ident = '0088:' + commercial_partner.company_registry
+        else:
+            ident = '9934:' + commercial_partner.vat.strip('HR') + bu_code
+        vals['party_node']['cac:PartyIdentification'] = [{
+            'cbc:ID': {
+                '_text': ident,
+                'schemeID': None,
+            },
+        }]
 
     def _add_invoice_accounting_supplier_party_nodes(self, document_node, vals):
         super()._add_invoice_accounting_supplier_party_nodes(document_node, vals)

@@ -119,9 +119,9 @@ DEFAULT_SUCCESS_SIGNAL = 'test successful'
 TEST_CURSOR_COOKIE_NAME = 'test_request_key'
 
 IGNORED_MSGS = re.compile(r"""
-    (?: failed\ to\ fetch  # base error
-      | connectionlosterror:  # conversion by offlineFailToFetchErrorHandler
-    )
+    failed\ to\ fetch  # base error
+  | connectionlosterror:  # conversion by offlineFailToFetchErrorHandler
+  | assetsloadingerror: # lazy loaded bundle
 """, flags=re.VERBOSE | re.IGNORECASE).search
 
 def get_db_name():
@@ -2295,6 +2295,9 @@ class HttpCase(TransactionCase):
 
         start_time = time.time()
         request_threads = get_http_request_threads()
+        if not request_threads:
+            return
+
         self._logger.info('waiting for threads: %s', request_threads)
 
         for thread in request_threads:
