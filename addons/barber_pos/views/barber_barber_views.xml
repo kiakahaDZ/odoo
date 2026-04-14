@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ════════════════════════════════════════════════════
+         VUES : Coiffeurs / Barbiers
+    ════════════════════════════════════════════════════ -->
+
+    <!-- Kanban Coiffeurs -->
+    <record id="view_barber_barber_kanban" model="ir.ui.view">
+        <field name="name">barber.barber.kanban</field>
+        <field name="model">barber.barber</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="state"/>
+                <field name="total_revenue"/>
+                <field name="total_orders"/>
+                <field name="contract_type"/>
+                <field name="commission_due"/>
+                <field name="photo"/>
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="oe_kanban_global_click p-3 #{record.state.raw_value == 'inactive' ? 'opacity-50' : ''}">
+                            <div class="d-flex align-items-center mb-2">
+                                <img t-if="record.photo.raw_value"
+                                     t-att-src="'data:image/png;base64,' + record.photo.raw_value"
+                                     class="rounded-circle me-3"
+                                     style="width:50px;height:50px;object-fit:cover;"/>
+                                <div t-else=""
+                                     class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-3 text-white fw-bold"
+                                     style="width:50px;height:50px;font-size:20px;">
+                                    <t t-esc="record.name.raw_value[0]"/>
+                                </div>
+                                <div>
+                                    <strong class="d-block"><field name="name"/></strong>
+                                    <span class="text-muted small"><field name="phone"/></span>
+                                </div>
+                            </div>
+                            <div class="row text-center small border-top pt-2">
+                                <div class="col-4">
+                                    <div class="fw-bold text-success"><field name="total_revenue"/> DZD</div>
+                                    <div class="text-muted">CA Total</div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="fw-bold"><field name="total_orders"/></div>
+                                    <div class="text-muted">Cmdes</div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="fw-bold text-primary"><field name="commission_due"/> DZD</div>
+                                    <div class="text-muted">Commission</div>
+                                </div>
+                            </div>
+                            <div class="mt-2 d-flex justify-content-between align-items-center">
+                                <span t-attf-class="badge #{record.state.raw_value == 'active' ? 'bg-success' : 'bg-secondary'}">
+                                    <field name="state"/>
+                                </span>
+                                <span class="badge bg-info">
+                                    <field name="contract_type"/>
+                                </span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Liste Coiffeurs -->
+    <record id="view_barber_barber_list" model="ir.ui.view">
+        <field name="name">barber.barber.list</field>
+        <field name="model">barber.barber</field>
+        <field name="arch" type="xml">
+            <list string="Coiffeurs" decoration-muted="state == 'inactive'">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="contract_type"/>
+                <field name="total_orders"/>
+                <field name="total_revenue" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="commission_due" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'active'"
+                       decoration-muted="state == 'inactive'"/>
+                <field name="currency_id" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Formulaire Coiffeur -->
+    <record id="view_barber_barber_form" model="ir.ui.view">
+        <field name="name">barber.barber.form</field>
+        <field name="model">barber.barber</field>
+        <field name="arch" type="xml">
+            <form string="Fiche Coiffeur">
+                <header>
+                    <button name="action_set_active" type="object" string="✅ Activer"
+                            class="btn-success" invisible="state == 'active'"/>
+                    <button name="action_set_inactive" type="object" string="⏸ Désactiver"
+                            class="btn-secondary" invisible="state == 'inactive'"/>
+                    <button name="action_open_session" type="object"
+                            string="🟢 Ouvrir une session POS" class="btn-primary"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="active,inactive"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_orders" icon="fa-shopping-cart">
+                            <field name="total_orders" widget="statinfo" string="Commandes"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-money">
+                            <field name="total_revenue" widget="statinfo" string="CA Total"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-percent">
+                            <field name="commission_due" widget="statinfo" string="Commission"/>
+                        </button>
+                    </div>
+                    <div class="oe_title d-flex align-items-center">
+                        <field name="photo" widget="image"
+                               options="{'size': [90, 90], 'preview_image': 'photo'}"
+                               class="rounded-circle me-3"/>
+                        <div>
+                            <label for="name"/>
+                            <h1><field name="name" placeholder="Nom du coiffeur..."/></h1>
+                            <h5 class="text-muted">
+                                <field name="code" readonly="1"/>
+                            </h5>
+                        </div>
+                    </div>
+                    <group>
+                        <group string="👤 Identité &amp; Rôle">
+                            <field name="name"/>
+                            <field name="phone"/>
+                            <field name="email"/>
+                            <field name="address"/>
+                            <field name="user_id" options="{'no_create': True}"/>
+                        </group>
+                        <group string="📊 Contrat actif">
+                            <field name="active_contract_id" readonly="1"/>
+                            <field name="contract_type" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="📋 Contrats" name="contracts">
+                            <field name="contract_ids">
+                                <list string="Historique des contrats" editable="bottom">
+                                    <field name="contract_type"/>
+                                    <field name="monthly_rent"
+                                           invisible="contract_type != 'rent'"/>
+                                    <field name="percentage"
+                                           invisible="contract_type != 'percentage'"/>
+                                    <field name="date_start"/>
+                                    <field name="date_end"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state == 'active'"
+                                           decoration-warning="state == 'draft'"
+                                           decoration-danger="state in ('expired', 'cancelled')"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="📝 Notes internes" name="notes">
+                            <field name="notes" placeholder="Remarques..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Recherche -->
+    <record id="view_barber_barber_search" model="ir.ui.view">
+        <field name="name">barber.barber.search</field>
+        <field name="model">barber.barber</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action Coiffeurs -->
+    <record id="action_barber_barber" model="ir.actions.act_window">
+        <field name="name">💈 Coiffeurs &amp; Barbiers</field>
+        <field name="res_model">barber.barber</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_barber_barber_search"/>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucun coiffeur enregistré
+            </p>
+            <p>Ajoutez vos coiffeurs/barbiers et assignez-leur un type de contrat.</p>
+        </field>
+    </record>
+</odoo>

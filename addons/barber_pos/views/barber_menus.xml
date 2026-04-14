@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ════════════════════════════════════════
+         MENUS PRINCIPAUX
+    ════════════════════════════════════════ -->
+
+    <!-- Menu racine -->
+    <menuitem id="menu_barber_root"
+              name="💈 Salon POS"
+              sequence="50"
+              web_icon="barber_pos,static/description/icon.png"/>
+
+    <!-- ── CAISSE (accessible à tous) ── -->
+    <menuitem id="menu_barber_pos_root"
+              name="🖥️ Caisse"
+              parent="menu_barber_root"
+              sequence="1"/>
+
+    <menuitem id="menu_barber_my_session"
+              name="Ma Session"
+              parent="menu_barber_pos_root"
+              action="action_my_barber_session"
+              sequence="1"
+              groups="barber_pos.group_barber_user"/>
+
+    <menuitem id="menu_barber_all_sessions"
+              name="Toutes les Sessions"
+              parent="menu_barber_pos_root"
+              action="action_barber_session"
+              sequence="2"
+              groups="barber_pos.group_barber_manager"/>
+
+    <menuitem id="menu_barber_my_orders"
+              name="Mes Commandes"
+              parent="menu_barber_pos_root"
+              action="action_my_barber_orders"
+              sequence="3"
+              groups="barber_pos.group_barber_user"/>
+
+    <menuitem id="menu_barber_all_orders"
+              name="Toutes les Commandes"
+              parent="menu_barber_pos_root"
+              action="action_barber_order"
+              sequence="4"
+              groups="barber_pos.group_barber_manager"/>
+
+    <!-- ── PRESTATIONS ── -->
+    <menuitem id="menu_barber_services_root"
+              name="✂️ Prestations"
+              parent="menu_barber_root"
+              sequence="2"
+              groups="barber_pos.group_barber_manager"/>
+
+    <menuitem id="menu_barber_service"
+              name="Prestations &amp; Tarifs"
+              parent="menu_barber_services_root"
+              action="action_barber_service"
+              sequence="1"/>
+
+    <menuitem id="menu_barber_service_category"
+              name="Catégories"
+              parent="menu_barber_services_root"
+              action="action_barber_service_category"
+              sequence="2"/>
+
+    <!-- ── COIFFEURS ── -->
+    <menuitem id="menu_barber_staff_root"
+              name="👥 Coiffeurs"
+              parent="menu_barber_root"
+              sequence="3"
+              groups="barber_pos.group_barber_manager"/>
+
+    <menuitem id="menu_barber_barber"
+              name="Coiffeurs &amp; Barbiers"
+              parent="menu_barber_staff_root"
+              action="action_barber_barber"
+              sequence="1"/>
+
+    <menuitem id="menu_barber_contract"
+              name="Contrats"
+              parent="menu_barber_staff_root"
+              action="action_barber_contract"
+              sequence="2"/>
+
+    <!-- ── RAPPORTS ── -->
+    <menuitem id="menu_barber_reports_root"
+              name="📊 Rapports"
+              parent="menu_barber_root"
+              sequence="4"
+              groups="barber_pos.group_barber_manager"/>
+
+    <menuitem id="menu_barber_dashboard"
+              name="Tableau de Bord Sessions"
+              parent="menu_barber_reports_root"
+              action="action_barber_dashboard"
+              sequence="1"/>
+
+    <menuitem id="menu_barber_stats"
+              name="CA par Coiffeur"
+              parent="menu_barber_reports_root"
+              action="action_barber_stats"
+              sequence="2"/>
+
+    <!-- ── CONFIGURATION ── -->
+    <menuitem id="menu_barber_config_root"
+              name="⚙️ Configuration"
+              parent="menu_barber_root"
+              sequence="10"
+              groups="barber_pos.group_barber_manager"/>
+
+    <menuitem id="menu_barber_config"
+              name="Paramètres Salon"
+              parent="menu_barber_config_root"
+              action="action_barber_config"
+              sequence="1"/>
+</odoo>

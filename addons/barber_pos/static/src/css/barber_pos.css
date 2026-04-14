@@ -1,0 +1,90 @@
+/* =====================================================
+   BARBER POS — CSS Backend
+   Styles pour l'interface d'administration du salon
+   ===================================================== */
+
+/* ─── Variables ─── */
+:root {
+    --barber-primary: #1a1a2e;
+    --barber-accent: #e94560;
+    --barber-gold: #f5a623;
+    --barber-success: #27ae60;
+    --barber-light: #f8f9fa;
+}
+
+/* ─── Kanban Cards ─── */
+.o_barber_kanban_card {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.o_barber_kanban_card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+/* ─── Stat Buttons ─── */
+.o_field_widget.o_stat_info .o_stat_value {
+    font-weight: 700;
+    color: var(--barber-accent);
+}
+
+/* ─── Status Badges ─── */
+.badge.bg-success {
+    background-color: var(--barber-success) !important;
+}
+
+/* ─── Form sheet enhancements ─── */
+.o_form_view .oe_title h1 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+/* ─── Session summary cards ─── */
+.barber_session_kpi {
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.barber_session_kpi.success {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    color: white;
+}
+
+/* ─── Receipt styles ─── */
+.barber_receipt {
+    font-family: 'Courier New', monospace;
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 16px;
+    border: 1px dashed #ccc;
+}
+
+.barber_receipt h3 {
+    text-align: center;
+    border-bottom: 2px solid #000;
+    padding-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+/* ─── Service Kanban colors ─── */
+.o_kanban_view .oe_kanban_color_1 { border-left: 4px solid #e74c3c; }
+.o_kanban_view .oe_kanban_color_2 { border-left: 4px solid #3498db; }
+.o_kanban_view .oe_kanban_color_4 { border-left: 4px solid #9b59b6; }
+.o_kanban_view .oe_kanban_color_6 { border-left: 4px solid #f39c12; }
+.o_kanban_view .oe_kanban_color_10 { border-left: 4px solid #1abc9c; }
+
+/* ─── Animations ─── */
+@keyframes barber_pulse {
+    0% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); }
+}
+
+.barber_session_open {
+    animation: barber_pulse 2s infinite;
+}

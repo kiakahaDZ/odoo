@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Rapport journalier -->
+    <record id="action_report_barber_daily" model="ir.actions.report">
+        <field name="name">Rapport Journalier</field>
+        <field name="model">barber.session</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">barber_pos.report_barber_daily</field>
+        <field name="report_file">barber_pos.report_barber_daily</field>
+        <field name="binding_model_id" ref="model_barber_session"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_barber_daily">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="session">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center mb-4">
+                            <h2>📊 Rapport de Session — <t t-esc="session.name"/></h2>
+                            <h4 class="text-muted">
+                                Coiffeur : <strong><t t-esc="session.barber_id.name"/></strong>
+                            </h4>
+                            <p>
+                                Ouverture :
+                                <t t-esc="session.date_open" t-options='{"widget": "datetime", "format": "dd/MM/yyyy HH:mm"}'/>
+                                — Fermeture :
+                                <t t-esc="session.date_close" t-options='{"widget": "datetime", "format": "dd/MM/yyyy HH:mm"}'/>
+                            </p>
+                        </div>
+
+                        <!-- KPIs -->
+                        <div class="row mb-4">
+                            <div class="col-3 text-center">
+                                <div class="card p-3 bg-success text-white">
+                                    <div class="fs-3 fw-bold"><t t-esc="session.total_revenue"/> DZD</div>
+                                    <div>CA Total</div>
+                                </div>
+                            </div>
+                            <div class="col-3 text-center">
+                                <div class="card p-3">
+                                    <div class="fs-3 fw-bold"><t t-esc="session.order_count"/></div>
+                                    <div>Commandes</div>
+                                </div>
+                            </div>
+                            <div class="col-3 text-center">
+                                <div class="card p-3">
+                                    <div class="fs-3 fw-bold"><t t-esc="session.total_cash"/> DZD</div>
+                                    <div>💵 Espèces</div>
+                                </div>
+                            </div>
+                            <div class="col-3 text-center">
+                                <div class="card p-3">
+                                    <div class="fs-3 fw-bold"><t t-esc="session.total_card"/> DZD</div>
+                                    <div>💳 Carte</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Détail des commandes -->
+                        <h4>🧾 Détail des Commandes</h4>
+                        <table class="table table-bordered table-sm">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>N° Ticket</th>
+                                    <th>Heure</th>
+                                    <th>Prestations</th>
+                                    <th>Paiement</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="session.order_ids.filtered(lambda o: o.state == 'paid')" t-as="order">
+                                    <tr>
+                                        <td><t t-esc="order.name"/></td>
+                                        <td>
+                                            <t t-esc="order.date_order" t-options='{"widget": "datetime", "format": "HH:mm"}'/>
+                                        </td>
+                                        <td>
+                                            <t t-foreach="order.order_line_ids" t-as="line">
+                                                <span class="badge bg-secondary me-1">
+                                                    <t t-esc="line.service_id.name"/> x<t t-esc="line.qty"/>
+                                                </span>
+                                            </t>
+                                        </td>
+                                        <td>
+                                            <t t-esc="dict(order._fields['payment_method'].selection)[order.payment_method]"/>
+                                        </td>
+                                        <td class="text-end fw-bold">
+                                            <t t-esc="order.amount_total"/> DZD
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot class="table-success">
+                                <tr>
+                                    <td colspan="4" class="text-end fw-bold">TOTAL SESSION</td>
+                                    <td class="text-end fw-bold">
+                                        <t t-esc="session.total_revenue"/> DZD
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <!-- Calcul commission/loyer -->
+                        <t t-set="contract" t-value="session.barber_id.active_contract_id"/>
+                        <t t-if="contract">
+                            <div class="alert alert-info mt-4">
+                                <h5>💰 Calcul de Rémunération</h5>
+                                <t t-if="contract.contract_type == 'percentage'">
+                                    <p>Type : <strong>Pourcentage du CA</strong> (<t t-esc="contract.percentage"/>%)</p>
+                                    <p>CA Session : <strong><t t-esc="session.total_revenue"/> DZD</strong></p>
+                                    <p>Part salon : <strong><t t-esc="round(session.total_revenue * contract.percentage / 100, 2)"/> DZD</strong></p>
+                                    <p>Part coiffeur : <strong><t t-esc="round(session.total_revenue * (1 - contract.percentage / 100), 2)"/> DZD</strong></p>
+                                </t>
+                                <t t-if="contract.contract_type == 'rent'">
+                                    <p>Type : <strong>Loyer mensuel fixe</strong></p>
+                                    <p>Loyer mensuel : <strong><t t-esc="contract.monthly_rent"/> DZD</strong></p>
+                                    <p>CA de cette session : <strong><t t-esc="session.total_revenue"/> DZD</strong></p>
+                                </t>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,23 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_barber_config_manager,barber.config manager,model_barber_config,barber_pos.group_barber_manager,1,1,1,1
+access_barber_config_user,barber.config user,model_barber_config,barber_pos.group_barber_user,1,0,0,0
+access_barber_barber_manager,barber.barber manager,model_barber_barber,barber_pos.group_barber_manager,1,1,1,1
+access_barber_barber_user,barber.barber user,model_barber_barber,barber_pos.group_barber_user,1,0,0,0
+access_barber_contract_manager,barber.contract manager,model_barber_contract,barber_pos.group_barber_manager,1,1,1,1
+access_barber_contract_user,barber.contract user,model_barber_contract,barber_pos.group_barber_user,1,0,0,0
+access_barber_service_category_manager,barber.service.category manager,model_barber_service_category,barber_pos.group_barber_manager,1,1,1,1
+access_barber_service_category_user,barber.service.category user,model_barber_service_category,barber_pos.group_barber_user,1,0,0,0
+access_barber_service_manager,barber.service manager,model_barber_service,barber_pos.group_barber_manager,1,1,1,1
+access_barber_service_user,barber.service user,model_barber_service,barber_pos.group_barber_user,1,0,0,0
+access_barber_service_product_manager,barber.service.product manager,model_barber_service_product,barber_pos.group_barber_manager,1,1,1,1
+access_barber_service_product_user,barber.service.product user,model_barber_service_product,barber_pos.group_barber_user,1,0,0,0
+access_barber_session_manager,barber.session manager,model_barber_session,barber_pos.group_barber_manager,1,1,1,1
+access_barber_session_user,barber.session user,model_barber_session,barber_pos.group_barber_user,1,1,1,0
+access_barber_order_manager,barber.order manager,model_barber_order,barber_pos.group_barber_manager,1,1,1,1
+access_barber_order_user,barber.order user,model_barber_order,barber_pos.group_barber_user,1,1,1,0
+access_barber_order_line_manager,barber.order.line manager,model_barber_order_line,barber_pos.group_barber_manager,1,1,1,1
+access_barber_order_line_user,barber.order.line user,model_barber_order_line,barber_pos.group_barber_user,1,1,1,1
+access_barber_payment_wizard_manager,barber.payment.wizard manager,model_barber_payment_wizard,barber_pos.group_barber_manager,1,1,1,1
+access_barber_payment_wizard_user,barber.payment.wizard user,model_barber_payment_wizard,barber_pos.group_barber_user,1,1,1,1
+access_barber_close_session_wizard_manager,barber.close.session.wizard manager,model_barber_close_session_wizard,barber_pos.group_barber_manager,1,1,1,1
+access_barber_close_session_wizard_user,barber.close.session.wizard user,model_barber_close_session_wizard,barber_pos.group_barber_user,1,1,1,1

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_barber_payment_wizard_form" model="ir.ui.view">
+        <field name="name">barber.payment.wizard.form</field>
+        <field name="model">barber.payment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="💳 Paiement">
+                <sheet>
+                    <div class="text-center mb-4">
+                        <h2 class="text-success">
+                            Total à payer :
+                            <field name="amount_total" readonly="1"/> DZD
+                        </h2>
+                    </div>
+                    <group>
+                        <field name="payment_method" widget="radio"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="amount_paid"/>
+                        </group>
+                        <group>
+                            <field name="amount_change" readonly="1"
+                                   class="fw-bold text-primary"/>
+                        </group>
+                    </group>
+                    <div class="alert alert-danger" role="alert"
+                         invisible="amount_paid >= amount_total or amount_paid == 0">
+                        ⚠️ Montant insuffisant pour valider le paiement.
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_confirm" type="object"
+                            string="✅ Confirmer le paiement"
+                            class="btn-success btn-lg"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
