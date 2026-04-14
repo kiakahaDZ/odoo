@@ -262,3 +262,33 @@ class BarberOrder(models.Model):
             'unit_price': price,
             'discount': discount,
         })
+
+    @api.model
+    def create_from_pos(self, vals):
+        """
+        Crée une commande et ses lignes depuis l'interface web POS.
+        vals = { 'session_id': id, 'barber_id': id, 'lines': [{'service_id': id, 'qty': 1, 'unit_price': X}] }
+        """
+        session = self.env['barber.session'].browse(vals.get('session_id'))
+        if not session or session.state != 'open':
+            raise UserError(_("La session est inexistante ou fermée."))
+
+        order = self.create({
+            'session_id': session.id,
+            'barber_id': vals.get('barber_id'),
+            'state': 'paid',  # On considère payé immédiatement dans cette interface simplifiée
+            'amount_paid': 0.0, # Sera calculé après
+        })
+
+        for line in vals.get('lines', []):
+            self.env['barber.order.line'].create({
+                'order_id': order.id,
+                'service_id': line['service_id'],
+                'qty': line.get('qty', 1),
+                'unit_price': line.get('unit_price', 0.0),
+            })
+        
+        # Mettre à jour le montant payé pour correspondre au total calculé
+        order.amount_paid = order.amount_total
+        
+        return order.name
