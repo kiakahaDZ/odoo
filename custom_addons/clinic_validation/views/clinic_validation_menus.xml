@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Menu Laboratoire -->
+        <menuitem id="menu_clinic_lab"
+                  name="Laboratoire"
+                  parent="clinic_patient.menu_clinic_root"
+                  sequence="40"/>
+
+        <menuitem id="menu_clinic_lab_validation"
+                  name="Analyses a Valider"
+                  parent="menu_clinic_lab"
+                  action="clinic_validation.action_clinic_lab_validation"
+                  sequence="10"/>
+
+        <!-- Menu Imagerie -->
+        <menuitem id="menu_clinic_imaging"
+                  name="Imagerie"
+                  parent="clinic_patient.menu_clinic_root"
+                  sequence="50"/>
+
+        <menuitem id="menu_clinic_imaging_validation"
+                  name="Examens a Realiser"
+                  parent="menu_clinic_imaging"
+                  action="clinic_validation.action_clinic_imaging_validation"
+                  sequence="10"/>
+    </data>
+</odoo>
+

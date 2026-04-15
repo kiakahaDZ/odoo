@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- ═══ Séquence : Code Coiffeur ═══ -->
+        <record id="seq_barber_barber" model="ir.sequence">
+            <field name="name">Barber Code</field>
+            <field name="code">barber.barber</field>
+            <field name="prefix">BAR-</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">1</field>
+        </record>
+
+        <!-- ═══ Séquence : Session POS ═══ -->
+        <record id="seq_barber_session" model="ir.sequence">
+            <field name="name">Barber Session</field>
+            <field name="code">barber.session</field>
+            <field name="prefix">SES-%(year)s%(month)s-</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">1</field>
+        </record>
+
+        <!-- ═══ Séquence : Ticket de caisse ═══ -->
+        <record id="seq_barber_order" model="ir.sequence">
+            <field name="name">Barber Order</field>
+            <field name="code">barber.order</field>
+            <field name="prefix">TKT-%(year)s%(month)s%(day)s-</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">1</field>
+        </record>
+    </data>
+</odoo>
+

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Menu Réception -->
+        <menuitem id="menu_clinic_reception"
+                  name="Réception"
+                  parent="clinic_patient.menu_clinic_root"
+                  sequence="15"/>
+
+        <menuitem id="menu_clinic_reception_tickets"
+                  name="Tickets de Réception"
+                  parent="menu_clinic_reception"
+                  action="clinic_reception.action_clinic_reception"
+                  sequence="10"/>
+
+        <menuitem id="menu_clinic_medical_acts"
+                  name="Actes Médicaux"
+                  parent="menu_clinic_reception"
+                  action="clinic_reception.action_clinic_medical_act_line"
+                  sequence="20"/>
+    </data>
+</odoo>
+

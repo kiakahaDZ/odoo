@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_clinic_payment_wizard_form" model="ir.ui.view">
+        <field name="name">clinic.payment.wizard.form</field>
+        <field name="model">clinic.payment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Caisse - Terminal de Paiement">
+                <group>
+                    <div style="font-size: 32px; font-weight: bold; text-align: center; color: #714B67; margin-bottom: 20px;">
+                        <field name="total_amount" widget="monetary" readonly="1" nolabel="1"/>
+                    </div>
+                </group>
+                <group>
+                    <field name="payment_method" widget="radio" class="o_payment_radio_btn"/>
+                    <!-- Champ invisible mais nécessaire pour calcul -->
+                    <field name="visit_id" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                </group>
+                <footer>
+                    <button string="✅ Valider (Espèces)" name="action_confirm_payment" type="object" class="btn-success oe_highlight" 
+                            invisible="payment_method != 'cash'"/>
+                    <button string="✅ Valider (Carte/Virement)" name="action_confirm_payment" type="object" class="btn-success oe_highlight" 
+                            invisible="payment_method != 'bank'"/>
+                    <button string="✅ Valider (Chèque)" name="action_confirm_payment" type="object" class="btn-success oe_highlight" 
+                            invisible="payment_method != 'check'"/>
+                    <button string="✅ Valider (Assurance)" name="action_confirm_payment" type="object" class="btn-success oe_highlight" 
+                            invisible="payment_method != 'insurance'"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_clinic_payment_wizard" model="ir.actions.act_window">
+        <field name="name">Encaisser Paiement</field>
+        <field name="res_model">clinic.payment.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
+

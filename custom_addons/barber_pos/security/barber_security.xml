@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ═══ Catégorie Safe ═══ -->
+        <record id="module_barber_pos" model="ir.module.category">
+            <field name="name">BarberPOS</field>
+            <field name="description">Point of Sale for Barbers</field>
+            <field name="sequence">100</field>
+        </record>
+
+        <!-- ═══ Groupes d'accès ═══ -->
+        <record id="group_barber_user" model="res.groups">
+            <field name="name">Coiffeur Barbier</field>
+            <field name="category_id" ref="module_barber_pos"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_barber_manager" model="res.groups">
+            <field name="name">Administrateur Salon</field>
+            <field name="category_id" ref="module_barber_pos"/>
+            <field name="implied_ids" eval="[(4, ref('group_barber_user'))]"/>
+        </record>
+
+        <!-- ═══ Règles d'enregistrement (Record Rules) ═══ -->
+
+        <!-- Sessions : le coiffeur ne voit que ses propres sessions -->
+        <record id="rule_barber_session_user" model="ir.rule">
+            <field name="name">Barber: voir ses propres sessions</field>
+            <field name="model_id" ref="model_barber_session"/>
+            <field name="domain_force">[
+                '|',
+                ('barber_id.user_id', '=', user.id),
+                ('barber_id', '=', False)
+            ]</field>
+            <field name="groups" eval="[(4, ref('group_barber_user'))]"/>
+        </record>
+
+        <!-- Sessions : l'admin voit toutes les sessions -->
+        <record id="rule_barber_session_manager" model="ir.rule">
+            <field name="name">Manager: voir toutes les sessions</field>
+            <field name="model_id" ref="model_barber_session"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_barber_manager'))]"/>
+        </record>
+
+        <!-- Commandes : le coiffeur ne voit que ses propres commandes -->
+        <record id="rule_barber_order_user" model="ir.rule">
+            <field name="name">Barber: voir ses propres commandes</field>
+            <field name="model_id" ref="model_barber_order"/>
+            <field name="domain_force">[
+                ('barber_id.user_id', '=', user.id)
+            ]</field>
+            <field name="groups" eval="[(4, ref('group_barber_user'))]"/>
+        </record>
+
+        <!-- Commandes : l'admin voit toutes les commandes -->
+        <record id="rule_barber_order_manager" model="ir.rule">
+            <field name="name">Manager: voir toutes les commandes</field>
+            <field name="model_id" ref="model_barber_order"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_barber_manager'))]"/>
+        </record>
+
+        <!-- Coiffeurs : chaque coiffeur voit sa propre fiche -->
+        <record id="rule_barber_barber_user" model="ir.rule">
+            <field name="name">Barber: voir sa propre fiche</field>
+            <field name="model_id" ref="model_barber_barber"/>
+            <field name="domain_force">[
+                ('user_id', '=', user.id)
+            ]</field>
+            <field name="groups" eval="[(4, ref('group_barber_user'))]"/>
+        </record>
+
+        <!-- Coiffeurs : l'admin voit tous les coiffeurs -->
+        <record id="rule_barber_barber_manager" model="ir.rule">
+            <field name="name">Manager: voir tous les coiffeurs</field>
+            <field name="model_id" ref="model_barber_barber"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_barber_manager'))]"/>
+        </record>
+    </data>
+</odoo>
+

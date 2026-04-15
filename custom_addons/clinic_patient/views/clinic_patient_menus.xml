@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ======================================= -->
+        <!-- MENU PRINCIPAL CLINIQUE                 -->
+        <!-- ======================================= -->
+        <menuitem id="menu_clinic_root"
+                  name="🏥 Clinique"
+                  sequence="10"
+                  web_icon="clinic_patient,static/description/icon.png"/>
+
+        <!-- ======================================= -->
+        <!-- RÉCEPTION                               -->
+        <!-- ======================================= -->
+        <menuitem id="menu_clinic_reception"
+                  name="Réception"
+                  parent="menu_clinic_root"
+                  sequence="10"
+                  groups="group_clinic_receptionist,group_clinic_manager"/>
+
+        <menuitem id="menu_clinic_patient_list"
+                  name="Patients"
+                  parent="menu_clinic_reception"
+                  action="clinic_patient.action_clinic_patient"
+                  sequence="10"/>
+
+        <menuitem id="menu_clinic_visit_new"
+                  name="Nouvelle Visite"
+                  parent="menu_clinic_reception"
+                  action="clinic_patient.action_clinic_visit"
+                  sequence="20"/>
+
+        <menuitem id="menu_clinic_reception_consultations"
+                  name="Consultations à Valider"
+                  parent="menu_clinic_reception"
+                  action="clinic_patient.action_clinic_consultation_tasks"
+                  sequence="30"/>
+
+        <!-- ======================================= -->
+        <!-- CAISSE                                  -->
+        <!-- ======================================= -->
+        <menuitem id="menu_clinic_cashier"
+                  name="Caisse"
+                  parent="menu_clinic_root"
+                  sequence="20"
+                  groups="group_clinic_cashier,group_clinic_financial,group_clinic_manager"/>
+
+        <menuitem id="menu_clinic_pos_terminal"
+                  name="Terminal Point de Vente"
+                  parent="menu_clinic_cashier"
+                  action="clinic_patient.action_clinic_pos_system"
+                  sequence="5"/>
+
+        <menuitem id="menu_clinic_cashier_payments"
+                  name="Toutes les Transactions"
+                  parent="menu_clinic_cashier"
+                  action="clinic_patient.action_clinic_cashier"
+                  sequence="10"/>
+
+        <menuitem id="menu_clinic_refunds"
+                  name="Remboursements"
+                  parent="menu_clinic_cashier"
+                  action="clinic_patient.action_clinic_refunds"
+                  sequence="20"
+                  groups="group_clinic_cashier,group_clinic_manager"/>
+
+        <!-- ======================================= -->
+        <!-- CONSULTATIONS                           -->
+        <!-- ======================================= -->
+        <menuitem id="menu_clinic_consultations"
+                  name="Consultations"
+                  parent="menu_clinic_root"
+                  sequence="30"
+                  groups="group_clinic_doctor,group_clinic_manager"/>
+
+        <menuitem id="menu_clinic_consultations_tasks"
+                  name="Mes Consultations"
+                  parent="menu_clinic_consultations"
+                  action="clinic_patient.action_clinic_consultation_tasks"
+                  sequence="10"/>
+
+        <!-- ======================================= -->
+        <!-- LABORATOIRE                             -->
+        <!-- ======================================= -->
+        <menuitem id="menu_clinic_lab"
+                  name="Laboratoire"
+                  parent="menu_clinic_root"
+                  sequence="40"
+                  groups="group_clinic_lab_tech,group_clinic_manager"/>
+
+        <menuitem id="menu_clinic_lab_tasks"
+                  name="Tâches / Analyses"
+                  parent="menu_clinic_lab"
+                  action="clinic_patient.action_clinic_lab_tasks"
+                  sequence="10"/>
+
+        <!-- ======================================= -->
+        <!-- IMAGERIE                                -->
+        <!-- ======================================= -->
+        <menuitem id="menu_clinic_imaging"
+                  name="Imagerie"
+                  parent="menu_clinic_root"
+                  sequence="50"
+                  groups="group_clinic_imaging_tech,group_clinic_manager"/>
+
+        <menuitem id="menu_clinic_imaging_tasks"
+                  name="Tâches / Examens"
+                  parent="menu_clinic_imaging"
+                  action="clinic_patient.action_clinic_imaging_tasks"
+                  sequence="10"/>
+
+        <!-- ======================================= -->
+        <!-- SERVICES MÉDICAUX                       -->
+        <!-- ======================================= -->
+        <menuitem id="menu_clinic_medical"
+                  name="Services Médicaux"
+                  parent="menu_clinic_root"
+                  sequence="60"
+                  groups="group_clinic_manager"/>
+
+        <menuitem id="menu_clinic_medical_visits"
+                  name="Toutes les Visites"
+                  parent="menu_clinic_medical"
+                  action="clinic_patient.action_clinic_visit"
+                  sequence="10"/>
+
+        <menuitem id="menu_clinic_doctors"
+                  name="Médecins / Praticiens"
+                  parent="menu_clinic_medical"
+                  action="clinic_patient.action_clinic_doctor"
+                  sequence="20"/>
+
+        <!-- ======================================= -->
+        <!-- CONFIGURATION                           -->
+        <!-- ======================================= -->
+        <menuitem id="menu_clinic_config"
+                  name="Configuration"
+                  parent="menu_clinic_root"
+                  sequence="90"
+                  groups="group_clinic_manager,base.group_system,group_clinic_cashier,group_clinic_financial"/>
+
+        <menuitem id="menu_clinic_medical_acts"
+                  name="Actes Médicaux (Tarifs)"
+                  parent="menu_clinic_config"
+                  action="clinic_patient.action_clinic_medical_acts"
+                  sequence="10"/>
+
+        <!-- ======================================= -->
+        <!-- RAPPORTS                                -->
+        <!-- ======================================= -->
+        <menuitem id="menu_clinic_reports"
+                  name="Rapports"
+                  parent="menu_clinic_root"
+                  sequence="80"
+                  groups="group_clinic_manager,base.group_system,group_clinic_financial,group_clinic_cashier"/>
+
+        <menuitem id="menu_clinic_financial_report"
+                  name="Rapport Financier"
+                  parent="menu_clinic_reports"
+                  action="clinic_patient.action_clinic_financial_report"
+                  sequence="10"/>
+    </data>
+</odoo>
+

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Héritage de la vue formulaire produit -->
+        <record id="product_template_form_view_medical" model="ir.ui.view">
+            <field name="name">product.template.form.medical</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='options']" position="inside">
+                    <span class="d-inline-block">
+                        <field name="is_medical_act"/>
+                        <label for="is_medical_act"/>
+                    </span>
+                </xpath>
+                
+                <xpath expr="//notebook" position="inside">
+                    <page string="Configuration Médicale" invisible="not is_medical_act">
+                        <group>
+                            <group string="Classification">
+                                <field name="medical_act_type" required="is_medical_act"/>
+                                <field name="service_type"/>
+                                <field name="requires_validation"/>
+                            </group>
+                            <group string="Médecin &amp; Commissions">
+                                <field name="doctor_id"/>
+                                <field name="doctor_share_percentage" widget="percentage"/>
+                                <field name="clinic_share_percentage" widget="percentage"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Vue Liste Actes Médicaux -->
+        <record id="view_clinic_medical_act_product_list" model="ir.ui.view">
+            <field name="name">clinic.medical.act.product.list</field>
+            <field name="model">product.template</field>
+            <field name="arch" type="xml">
+                <list string="Actes Médicaux">
+                    <field name="name"/>
+                    <field name="medical_act_type"/>
+                    <field name="service_type"/>
+                    <field name="list_price"/>
+                    <field name="doctor_id"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_medical_acts" model="ir.actions.act_window">
+            <field name="name">Paramétrage des Actes</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('is_medical_act', '=', True)]</field>
+            <field name="context">{'default_is_medical_act': True, 'default_type': 'service'}</field>
+            <field name="view_id" ref="view_clinic_medical_act_product_list"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Créer un nouvel acte médical
+                </p>
+                <p>
+                    Définissez les consultations, examens et autres services médicaux ici.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>
+

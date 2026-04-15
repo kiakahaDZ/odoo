@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vue Formulaire Ligne de Réception -->
+        <record id="view_clinic_reception_line_form" model="ir.ui.view">
+            <field name="name">clinic.reception.line.form</field>
+            <field name="model">clinic.reception.line</field>
+            <field name="arch" type="xml">
+                <form string="Ligne de Réception">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="product_id" domain="[('is_medical_act', '=', True)]"/>
+                                <field name="medical_act_type" readonly="1"/>
+                                <field name="service_type" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="doctor_id" readonly="1"/>
+                                <field name="quantity"/>
+                                <field name="price_unit" widget="monetary"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="price_total" widget="monetary" readonly="1"/>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="notes"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vue Liste Ligne de Réception -->
+        <record id="view_clinic_reception_line_tree" model="ir.ui.view">
+            <field name="name">clinic.reception.line.list</field>
+            <field name="model">clinic.reception.line</field>
+            <field name="arch" type="xml">
+                <list string="Lignes de Réception">
+                    <field name="product_id" domain="[('is_medical_act', '=', True)]"/>
+                    <field name="medical_act_type" readonly="1"/>
+                    <field name="service_type" readonly="1"/>
+                    <field name="doctor_id" readonly="1"/>
+                    <field name="quantity"/>
+                    <field name="price_unit" widget="monetary"/>
+                    <field name="price_total" widget="monetary" readonly="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="notes"/>
+                </list>
+            </field>
+        </record>
+    </data>
+</odoo>
+

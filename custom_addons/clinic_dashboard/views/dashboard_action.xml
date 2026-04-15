@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Action Principale - Tableau de Bord -->
+        <record id="action_clinic_dashboard_main" model="ir.actions.act_window">
+            <field name="name">Tableau de Bord</field>
+            <field name="res_model">clinic.medical.act.line</field>
+            <field name="view_mode">graph,pivot,list</field>
+            <field name="domain">[('state', 'in', ['paid', 'done'])]</field>
+            <field name="context">{'group_by': 'date:month', 'graph_mode': 'line'}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Bienvenue sur votre tableau de bord
+                </p>
+                <p>Vue des actes médicaux et revenus</p>
+            </field>
+        </record>
+
+        <menuitem id="menu_clinic_dashboard"
+                  name="Tableau de Bord"
+                  parent="clinic_patient.menu_clinic_root"
+                  action="action_clinic_dashboard_main"
+                  sequence="1"
+                  groups="clinic_patient.group_clinic_manager"/>
+    </data>
+</odoo>
+

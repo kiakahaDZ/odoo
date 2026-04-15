@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Action Laboratoire -->
+        <record id="action_clinic_lab_validation" model="ir.actions.act_window">
+            <field name="name">Validation Laboratoire</field>
+            <field name="res_model">clinic.medical.act.line</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="domain">[('medical_act_type', '=', 'laboratory'), ('state', 'in', ['waiting', 'paid', 'in_progress'])]</field>
+            <field name="context">{'default_medical_act_type': 'laboratory'}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Aucun acte de laboratoire a valider
+                </p>
+                <p>
+                    Les analyses payees apparaitront ici pour validation.
+                </p>
+            </field>
+        </record>
+
+        <!-- Action Imagerie -->
+        <record id="action_clinic_imaging_validation" model="ir.actions.act_window">
+            <field name="name">Validation Imagerie</field>
+            <field name="res_model">clinic.medical.act.line</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="domain">[('medical_act_type', '=', 'imaging'), ('state', 'in', ['waiting', 'paid', 'in_progress'])]</field>
+            <field name="context">{'default_medical_act_type': 'imaging'}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Aucun acte d'imagerie a valider
+                </p>
+                <p>
+                    Les examens d'imagerie payes apparaitront ici pour realisation.
+                </p>
+            </field>
+        </record>
+
+        <!-- Vue Kanban pour Laboratoire -->
+        <record id="view_clinic_lab_validation_kanban" model="ir.ui.view">
+            <field name="name">clinic.medical.act.line.kanban</field>
+            <field name="model">clinic.medical.act.line</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state">
+                    <field name="name"/>
+                    <field name="patient_id"/>
+                    <field name="product_id"/>
+                    <field name="state"/>
+                    <field name="date"/>
+                    <field name="price_total"/>
+                    <templates>
+                        <t t-name="card">
+                            <div class="oe_kanban_global_click">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                    </div>
+                                    <span class="badge badge-pill"><field name="state" widget="label_selection"/></span>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <p><strong>Patient:</strong> <field name="patient_id"/></p>
+                                    <p><strong>Acte:</strong> <field name="product_id"/></p>
+                                    <p><strong>Montant:</strong> <field name="price_total" widget="monetary"/></p>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Vue Formulaire pour validation -->
+        <record id="view_clinic_lab_validation_form" model="ir.ui.view">
+            <field name="name">clinic.medical.act.line.validation.form</field>
+            <field name="model">clinic.medical.act.line</field>
+            <field name="arch" type="xml">
+                <form string="Validation Acte Medical">
+                    <header>
+                        <button name="action_set_paid" string="Marquer comme Paye" type="object" class="btn-primary" invisible="state != 'waiting'"/>
+                        <button name="action_set_in_progress" string="Marquer En Cours" type="object" class="btn-primary" invisible="state != 'paid'"/>
+                        <button name="action_validate" string="Valider (Realise)" type="object" class="btn-success" invisible="state != 'in_progress'"/>
+                        <button name="action_cancel" string="Annuler" type="object" class="btn-secondary" invisible="state in ['done', 'cancelled']"/>
+                        <field name="state" widget="statusbar" readonly="1"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="patient_id" readonly="1"/>
+                                <field name="product_id" readonly="1"/>
+                                <field name="medical_act_type" readonly="1"/>
+                                <field name="date" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="price_unit" readonly="1" widget="monetary"/>
+                                <field name="quantity" readonly="1"/>
+                                <field name="price_total" readonly="1" widget="monetary"/>
+                                <field name="reception_id" readonly="1"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="validated_by" readonly="1"/>
+                                <field name="validation_date" readonly="1"/>
+                                <field name="payment_date" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="doctor_share_amount" readonly="1" widget="monetary"/>
+                                <field name="clinic_share_amount" readonly="1" widget="monetary"/>
+                            </group>
+                        </group>
+                        <field name="notes" placeholder="Notes supplementaires..."/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vue Liste -->
+        <record id="view_clinic_lab_validation_list" model="ir.ui.view">
+            <field name="name">clinic.medical.act.line.validation.list</field>
+            <field name="model">clinic.medical.act.line</field>
+            <field name="arch" type="xml">
+                <list string="Validation Actes">
+                    <field name="name"/>
+                    <field name="patient_id"/>
+                    <field name="product_id"/>
+                    <field name="medical_act_type"/>
+                    <field name="date"/>
+                    <field name="price_total" sum="Total" widget="monetary"/>
+                    <field name="state" widget="label_selection"/>
+                </list>
+            </field>
+        </record>
+    </data>
+</odoo>
+

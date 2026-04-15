@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- ============================= -->
+        <!-- CATÉGORIES DE PRODUITS       -->
+        <!-- ============================= -->
+        
+        <record id="product_category_laboratory" model="product.category">
+            <field name="name">Actes Laboratoire</field>
+
+        </record>
+
+        <record id="product_category_imaging" model="product.category">
+            <field name="name">Actes Imagerie</field>
+
+        </record>
+
+        <!-- ============================= -->
+        <!-- ACTES LABORATOIRE             -->
+        <!-- ============================= -->
+
+        <!-- Prise de sang -->
+        <record id="product_prise_de_sang" model="product.template">
+            <field name="name">Prise de sang</field>
+            <field name="description">Analyse sanguine complete</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_laboratory"/>
+            <field name="list_price">1000.00</field>
+            <field name="is_medical_act">True</field>
+            <field name="medical_act_type">laboratory</field>
+            <field name="service_type">analysis</field>
+            <field name="doctor_share_percentage">30.0</field>
+            <field name="clinic_share_percentage">70.0</field>
+        </record>
+
+        <!-- Bilan lipidique -->
+        <record id="product_bilan_lipidique" model="product.template">
+            <field name="name">Bilan lipidique</field>
+            <field name="description">Dosage cholestérol et triglycérides</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_laboratory"/>
+            <field name="list_price">500.00</field>
+            <field name="is_medical_act">True</field>
+            <field name="medical_act_type">laboratory</field>
+            <field name="service_type">analysis</field>
+            <field name="doctor_share_percentage">30.0</field>
+            <field name="clinic_share_percentage">70.0</field>
+        </record>
+
+        <!-- Groupage sanguin -->
+        <record id="product_groupage_sanguin" model="product.template">
+            <field name="name">Groupage sanguin</field>
+            <field name="description">Détermination groupe sanguin</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_laboratory"/>
+            <field name="list_price">800.00</field>
+            <field name="is_medical_act">True</field>
+            <field name="medical_act_type">laboratory</field>
+            <field name="service_type">analysis</field>
+            <field name="doctor_share_percentage">30.0</field>
+            <field name="clinic_share_percentage">70.0</field>
+        </record>
+
+        <!-- Analyse urinaire -->
+        <record id="product_analyse_urinaire" model="product.template">
+            <field name="name">Analyse urinaire</field>
+            <field name="description">Test d'urine complet</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_laboratory"/>
+            <field name="list_price">400.00</field>
+            <field name="is_medical_act">True</field>
+            <field name="medical_act_type">laboratory</field>
+            <field name="service_type">analysis</field>
+            <field name="doctor_share_percentage">30.0</field>
+            <field name="clinic_share_percentage">70.0</field>
+        </record>
+
+        <!-- Glycémie -->
+        <record id="product_glycemie" model="product.template">
+            <field name="name">Glycémie</field>
+            <field name="description">Dosage du glucose</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_laboratory"/>
+            <field name="list_price">300.00</field>
+            <field name="is_medical_act">True</field>
+            <field name="medical_act_type">laboratory</field>
+            <field name="service_type">analysis</field>
+            <field name="doctor_share_percentage">30.0</field>
+            <field name="clinic_share_percentage">70.0</field>
+        </record>
+
+        <!-- ============================= -->
+        <!-- ACTES IMAGERIE               -->
+        <!-- ============================= -->
+
+        <!-- Radiographie thoracique -->
+        <record id="product_radio_thorax" model="product.template">
+            <field name="name">Radiographie thoracique</field>
+            <field name="description">Radiographie du thorax</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_imaging"/>
+            <field name="list_price">2000.00</field>
+            <field name="is_medical_act">True</field>
+            <field name="medical_act_type">imaging</field>
+            <field name="service_type">imaging</field>
+            <field name="doctor_share_percentage">25.0</field>
+            <field name="clinic_share_percentage">75.0</field>
+        </record>
+
+        <!-- Échographie abdominale -->
+        <record id="product_echo_abdomen" model="product.template">
+            <field name="name">Échographie abdominale</field>
+            <field name="description">Échographie de l'abdomen</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_imaging"/>
+            <field name="list_price">2500.00</field>
+            <field name="is_medical_act">True</field>
+            <field name="medical_act_type">imaging</field>
+            <field name="service_type">imaging</field>
+            <field name="doctor_share_percentage">25.0</field>
+            <field name="clinic_share_percentage">75.0</field>
+        </record>
+
+        <!-- Échographie mammaire -->
+        <record id="product_echo_sein" model="product.template">
+            <field name="name">Échographie mammaire</field>
+            <field name="description">Échographie du sein</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_imaging"/>
+            <field name="list_price">2500.00</field>
+            <field name="is_medical_act">True</field>
+            <field name="medical_act_type">imaging</field>
+            <field name="service_type">imaging</field>
+            <field name="doctor_share_percentage">25.0</field>
+            <field name="clinic_share_percentage">75.0</field>
+        </record>
+
+        <!-- Scanner abdominal -->
+        <record id="product_scanner_abdomen" model="product.template">
+            <field name="name">Scanner abdominal</field>
+            <field name="description">Scan de l'abdomen</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_imaging"/>
+            <field name="list_price">5000.00</field>
+            <field name="is_medical_act">True</field>
+            <field name="medical_act_type">imaging</field>
+            <field name="service_type">imaging</field>
+            <field name="doctor_share_percentage">25.0</field>
+            <field name="clinic_share_percentage">75.0</field>
+        </record>
+
+        <!-- IRM crânienne -->
+        <record id="product_irm_cranienne" model="product.template">
+            <field name="name">IRM crânienne</field>
+            <field name="description">Imagerie par résonance magnétique crânienne</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="product_category_imaging"/>
+            <field name="list_price">8000.00</field>
+            <field name="is_medical_act">True</field>
+            <field name="medical_act_type">imaging</field>
+            <field name="service_type">imaging</field>
+            <field name="doctor_share_percentage">25.0</field>
+            <field name="clinic_share_percentage">75.0</field>
+        </record>
+
+        <!-- ============================= -->
+        <!-- PATIENTS DE TEST             -->
+        <!-- ============================= -->
+
+        <record id="patient_karim" model="res.partner">
+            <field name="name">Karim Benali</field>
+            <field name="is_patient">True</field>
+            <field name="date_of_birth">1985-03-15</field>
+            <field name="gender">male</field>
+            <field name="blood_group">o+</field>
+            <field name="phone">0661122334</field>
+            <field name="street">Rue Ali Kafi</field>
+            <field name="city">Alger</field>
+        </record>
+
+        <record id="patient_zahra" model="res.partner">
+            <field name="name">Zahra Ameziane</field>
+            <field name="is_patient">True</field>
+            <field name="date_of_birth">1992-07-22</field>
+            <field name="gender">female</field>
+            <field name="blood_group">ab-</field>
+            <field name="phone">0661122335</field>
+            <field name="street">Boulevard Didouche Mourad</field>
+            <field name="city">Alger</field>
+        </record>
+
+        <record id="patient_younes" model="res.partner">
+            <field name="name">Younes Hamidou</field>
+            <field name="is_patient">True</field>
+            <field name="date_of_birth">1978-11-08</field>
+            <field name="gender">male</field>
+            <field name="blood_group">a+</field>
+            <field name="phone">0661122336</field>
+            <field name="street">Rue Hassiba Ben Bouali</field>
+            <field name="city">Alger</field>
+        </record>
+
+    </data>
+</odoo>
+

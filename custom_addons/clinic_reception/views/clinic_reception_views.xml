@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vue Formulaire Réception -->
+        <record id="view_clinic_reception_form" model="ir.ui.view">
+            <field name="name">clinic.reception.form</field>
+            <field name="model">clinic.reception</field>
+            <field name="arch" type="xml">
+                <form string="Ticket de Réception">
+                    <header>
+                        <button name="action_send_to_cashier" string="Envoyer à la Caisse" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                        <button name="action_mark_paid" string="Marquer Payé" type="object" class="btn-primary" invisible="state != 'waiting'"/>
+                        <button name="action_mark_done" string="Terminé" type="object" class="btn-success" invisible="state not in ['paid', 'in_progress']"/>
+                        <button name="action_view_medical_acts" string="Voir Actes Créés" type="object" class="btn-info" invisible="state == 'draft'"/>
+                        <button name="action_cancel" string="Annuler" type="object" class="btn-secondary" invisible="state == 'done'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,waiting,paid,in_progress,done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="patient_id"/>
+                                <field name="patient_number"/>
+                                <field name="reception_date"/>
+                            </group>
+                            <group>
+                                <field name="state"/>
+                                <field name="receptionist_id"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Lignes de prestations -->
+                        <separator string="Actes Medicaux Demandes"/>
+                        <field name="medical_act_line_ids" nolabel="1" form_view_ref="clinic_reception.view_clinic_reception_line_form" tree_view_ref="clinic_reception.view_clinic_reception_line_tree"/>
+                        
+                        <!-- Totaux -->
+                        <group>
+                            <group>
+                                <field name="act_count"/>
+                            </group>
+                            <group>
+                                <label for="total_amount"/>
+                                <div>
+                                    <field name="total_amount" widget="monetary" class="oe_bold" nolabel="1"/>
+                                </div>
+                            </group>
+                        </group>
+                        
+                        <field name="currency_id" invisible="1"/>
+                        <field name="notes" placeholder="Notes supplementaires..."/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vue Liste Réception -->
+        <record id="view_clinic_reception_list" model="ir.ui.view">
+            <field name="name">clinic.reception.list</field>
+            <field name="model">clinic.reception</field>
+            <field name="arch" type="xml">
+                <list string="Tickets de Réception">
+                    <field name="name"/>
+                    <field name="reception_date"/>
+                    <field name="patient_id"/>
+                    <field name="total_amount" sum="Total"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Vue Kanban Réception -->
+        <record id="view_clinic_reception_kanban" model="ir.ui.view">
+            <field name="name">clinic.reception.kanban</field>
+            <field name="model">clinic.reception</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state">
+                    <field name="name"/>
+                    <field name="patient_id"/>
+                    <field name="total_amount"/>
+                    <field name="state"/>
+                    <templates>
+                        <t t-name="card">
+                            <div class="oe_kanban_global_click">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                    </div>
+                                    <span class="badge badge-pill"><field name="total_amount" widget="monetary"/></span>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <p><field name="patient_id"/></p>
+                                </div>
+                                <div class="o_kanban_record_footer">
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="state" widget="label_selection"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Vue Recherche -->
+        <record id="view_clinic_reception_search" model="ir.ui.view">
+            <field name="name">clinic.reception.search</field>
+            <field name="model">clinic.reception</field>
+            <field name="arch" type="xml">
+                <search string="Rechercher Tickets">
+                    <field name="name"/>
+                    <field name="patient_id"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_clinic_reception" model="ir.actions.act_window">
+            <field name="name">Tickets de Réception</field>
+            <field name="res_model">clinic.reception</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="search_view_id" ref="view_clinic_reception_search"/>
+            <field name="context">{'search_default_today': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Créer un nouveau ticket de réception
+                </p>
+            </field>
+        </record>
+
+        <!-- Action Actes Médicaux -->
+        <record id="action_clinic_medical_act_line" model="ir.actions.act_window">
+            <field name="name">Actes Médicaux</field>
+            <field name="res_model">clinic.medical.act.line</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Aucun acte médical enregistré
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>
+
