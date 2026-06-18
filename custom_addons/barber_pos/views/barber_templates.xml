@@ -45,6 +45,18 @@
                             <div class="p-3 border-bottom bg-light">
                                 <h4 class="mb-0">🧾 Ticket en cours</h4>
                             </div>
+                            <!-- Sélection Client -->
+                            <div class="p-2 border-bottom">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0">👤</span>
+                                    <select class="form-select border-start-0" id="customer_select">
+                                        <option value="">-- Sélectionner un client --</option>
+                                    </select>
+                                </div>
+                                <div id="customer_vip_info" class="mt-2 small text-success fw-bold" style="display:none;">
+                                    ⭐ Points: <span id="customer_points">0</span> (Valeur: <span id="customer_points_val">0</span> DZD)
+                                </div>
+                            </div>
                             <div class="flex-grow-1 p-3 overflow-auto" id="current_order_lines">
                                 <p class="text-center text-muted mt-5">Le panier est vide</p>
                             </div>

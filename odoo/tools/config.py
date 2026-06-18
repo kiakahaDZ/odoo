@@ -27,7 +27,7 @@ _dangerous_logger = logging.getLogger(__name__)  # use config._log() instead
 optparse._ = str  # disable gettext
 
 ALL_DEV_MODE = ['access', 'qweb', 'reload', 'xml']
-DEFAULT_SERVER_WIDE_MODULES = ['base', 'rpc', 'web']
+DEFAULT_SERVER_WIDE_MODULES = ['base', 'web']
 REQUIRED_SERVER_WIDE_MODULES = ['base', 'web']
 
 

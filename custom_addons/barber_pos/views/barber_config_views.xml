@@ -37,6 +37,16 @@
                     <group string="🖼️ Logo">
                         <field name="logo" widget="image" options="{'size': [256, 256]}"/>
                     </group>
+
+                    <notebook>
+                        <page string="⭐ Système VIP" name="vip_settings">
+                            <group>
+                                <field name="enable_vip"/>
+                                <field name="vip_point_ratio" invisible="not enable_vip"/>
+                                <field name="vip_point_value" invisible="not enable_vip"/>
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>

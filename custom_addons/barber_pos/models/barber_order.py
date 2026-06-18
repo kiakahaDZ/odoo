@@ -41,6 +41,7 @@ class BarberOrderLine(models.Model):
     notes = fields.Char(string='Note sur la prestation')
     allow_price_override = fields.Boolean(
         related='service_id.allow_price_override', readonly=True)
+    color = fields.Integer(related='service_id.color', readonly=True)
 
     # ─── Compute ──────────────────────────────────────────────────────────────
     @api.depends('qty', 'unit_price', 'discount')
@@ -107,6 +108,8 @@ class BarberOrder(models.Model):
     barber_id = fields.Many2one(
         'barber.barber', string='Coiffeur', required=True,
         tracking=True, ondelete='restrict')
+    partner_id = fields.Many2one(
+        'res.partner', string='Client', tracking=True)
 
     # ─── Date & heure ─────────────────────────────────────────────────────────
     date_order = fields.Datetime(
@@ -133,6 +136,12 @@ class BarberOrder(models.Model):
     amount_change = fields.Float(
         string='Rendu monnaie', compute='_compute_change',
         store=True, digits=(10, 2))
+
+    # ─── Système VIP ──────────────────────────────────────────────────────────
+    points_earned = fields.Float(string='Points gagnés', readonly=True)
+    points_used = fields.Float(string='Points utilisés', default=0.0)
+    points_amount = fields.Float(
+        string='Remise Points (DZD)', compute='_compute_points_amount')
 
     # ─── Paiement ─────────────────────────────────────────────────────────────
     payment_method = fields.Selection([
@@ -165,11 +174,17 @@ class BarberOrder(models.Model):
             order.amount_tax = subtotal * (order.tax_rate / 100.0)
             order.amount_total = subtotal + order.amount_tax
 
-    @api.depends('amount_paid', 'amount_total')
+    @api.depends('amount_paid', 'amount_total', 'points_amount')
     def _compute_change(self):
         for order in self:
             order.amount_change = max(
-                0.0, order.amount_paid - order.amount_total)
+                0.0, (order.amount_paid + order.points_amount) - order.amount_total)
+
+    @api.depends('points_used')
+    def _compute_points_amount(self):
+        config = self.env['barber.config'].get_current_config()
+        for order in self:
+            order.points_amount = order.points_used * config.vip_point_value
 
     @api.onchange('session_id')
     def _onchange_session(self):
@@ -214,20 +229,45 @@ class BarberOrder(models.Model):
             },
         }
 
-    def action_confirm_payment(self, payment_method, amount_paid):
+    def action_confirm_payment(self, payment_method, amount_paid, points_used=0.0):
         """Confirme le paiement et clôture la commande."""
         self.ensure_one()
         if self.state != 'draft':
             raise UserError(_('Cette commande est déjà traitée.'))
-        if amount_paid < self.amount_total:
+        
+        config = self.env['barber.config'].get_current_config()
+        points_val = points_used * config.vip_point_value
+        
+        if (amount_paid + points_val) < self.amount_total:
             raise UserError(_(
-                'Le montant payé (%.2f) est insuffisant. Total dû : %.2f DZD.'
-            ) % (amount_paid, self.amount_total))
+                'Le montant total payé (%.2f + %.2f points = %.2f) est insuffisant. '
+                'Total dû : %.2f DZD.'
+            ) % (amount_paid, points_used, amount_paid + points_val, self.amount_total))
+
+        # Vérifier si le client a assez de points
+        if points_used > 0:
+            if not self.partner_id:
+                raise UserError(_('Un client doit être sélectionné pour utiliser des points VIP.'))
+            if self.partner_id.vip_points < points_used:
+                raise UserError(_('Le client n\'a pas assez de points (Dispo: %.2f).') % self.partner_id.vip_points)
+
+        # Calcul des points gagnés
+        earned = 0.0
+        if config.enable_vip and self.partner_id:
+            earned = (self.amount_total / 100.0) * config.vip_point_ratio
+
         self.write({
             'state': 'paid',
             'payment_method': payment_method,
             'amount_paid': amount_paid,
+            'points_used': points_used,
+            'points_earned': earned,
         })
+
+        # Mettre à jour les points du partenaire
+        if self.partner_id:
+            self.partner_id.vip_points += (earned - points_used)
+        
         return True
 
     def action_cancel(self):
@@ -267,7 +307,7 @@ class BarberOrder(models.Model):
     def create_from_pos(self, vals):
         """
         Crée une commande et ses lignes depuis l'interface web POS.
-        vals = { 'session_id': id, 'barber_id': id, 'lines': [{'service_id': id, 'qty': 1, 'unit_price': X}] }
+        vals = { 'session_id': id, 'barber_id': id, 'partner_id': id, 'points_used': float, 'lines': [...] }
         """
         session = self.env['barber.session'].browse(vals.get('session_id'))
         if not session or session.state != 'open':
@@ -276,8 +316,8 @@ class BarberOrder(models.Model):
         order = self.create({
             'session_id': session.id,
             'barber_id': vals.get('barber_id'),
-            'state': 'paid',  # On considère payé immédiatement dans cette interface simplifiée
-            'amount_paid': 0.0, # Sera calculé après
+            'partner_id': vals.get('partner_id'),
+            'state': 'draft', # On crée en draft puis on confirme
         })
 
         for line in vals.get('lines', []):
@@ -288,7 +328,14 @@ class BarberOrder(models.Model):
                 'unit_price': line.get('unit_price', 0.0),
             })
         
-        # Mettre à jour le montant payé pour correspondre au total calculé
-        order.amount_paid = order.amount_total
+        # Confirmer le paiement avec points
+        points_used = vals.get('points_used', 0.0)
+        config = self.env['barber.config'].get_current_config()
+        points_val = points_used * config.vip_point_value
+        
+        # Le montant payé réellement (cash/card) est le total moins les points
+        amount_to_pay = max(0.0, order.amount_total - points_val)
+        
+        order.action_confirm_payment('cash', amount_to_pay, points_used)
         
         return order.name

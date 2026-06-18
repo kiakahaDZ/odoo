@@ -6,4 +6,5 @@ from . import (
     barber_service,
     barber_session,
     barber_order,
+    res_partner,
 )

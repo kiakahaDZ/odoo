@@ -15,7 +15,12 @@
                     <group>
                         <field name="payment_method" widget="radio"/>
                     </group>
-                    <group>
+                    <group string="⭐ Client VIP" invisible="not partner_id">
+                        <field name="partner_id"/>
+                        <field name="partner_points"/>
+                        <field name="points_used"/>
+                    </group>
+                    <group string="💵 Règlement">
                         <group>
                             <field name="amount_paid"/>
                         </group>

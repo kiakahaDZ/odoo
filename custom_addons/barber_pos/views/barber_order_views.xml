@@ -13,6 +13,7 @@
                   decoration-muted="state == 'cancelled'">
                 <field name="name"/>
                 <field name="date_order"/>
+                <field name="partner_id"/>
                 <field name="barber_id"/>
                 <field name="session_id"/>
                 <field name="payment_method"/>
@@ -62,12 +63,16 @@
                                    domain="[('state', '=', 'open')]"
                                    readonly="state != 'draft'"/>
                             <field name="barber_id" readonly="state != 'draft'"/>
+                            <field name="partner_id" readonly="state != 'draft'"/>
                             <field name="date_order" readonly="state != 'draft'"/>
                         </group>
                         <group string="💰 Paiement" invisible="state == 'draft'">
                             <field name="payment_method" readonly="state == 'paid'"/>
                             <field name="amount_paid" readonly="state == 'paid'"/>
                             <field name="amount_change" readonly="1"/>
+                            <field name="points_used" invisible="points_used == 0"/>
+                            <field name="points_amount" invisible="points_used == 0"/>
+                            <field name="points_earned" invisible="state != 'paid'"/>
                         </group>
                     </group>
 

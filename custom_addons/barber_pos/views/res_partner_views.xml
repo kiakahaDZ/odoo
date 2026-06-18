@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_barber_vip" model="ir.ui.view">
+        <field name="name">res.partner.form.barber.vip</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='internal_notes']" position="after">
+                <page string="⭐ Fidélité VIP" name="barber_vip">
+                    <group>
+                        <group string="Statut VIP">
+                            <field name="is_vip"/>
+                            <field name="vip_card_number"/>
+                        </group>
+                        <group string="Points">
+                            <field name="vip_points"/>
+                            <button name="action_view_barber_orders" type="object"
+                                    string="Voir les commandes" class="btn-link"
+                                    icon="fa-list"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_barber_customers" model="ir.actions.act_window">
+        <field name="name">👥 Clients</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="context">{'default_is_company': False}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Gérez vos clients et leur programme de fidélité.
+            </p>
+        </field>
+    </record>
+</odoo>

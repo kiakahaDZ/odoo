@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': '💈 Barber & Salon POS',
-    'version': '18.0.1.0',
+    'version': '19.0.1.0',
     'category': 'Point of Sale',
     'summary': 'Système de caisse complet pour salon de coiffure et barbier',
     'description': """
@@ -65,6 +65,7 @@
         'views/barber_session_views.xml',
         'views/barber_order_views.xml',
         'views/barber_dashboard_views.xml',
+        'views/res_partner_views.xml',
         'views/barber_templates.xml',
         'views/barber_menus.xml',
 

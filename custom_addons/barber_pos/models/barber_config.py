@@ -31,10 +31,16 @@ class BarberConfig(models.Model):
 
     active = fields.Boolean(default=True)
 
-    _sql_constraints = [
-        ('unique_config', 'UNIQUE(company_id)',
-         'Une seule configuration par société est autorisée.')
-    ]
+    # ─── Système VIP ──────────────────────────────────────────────────────────
+    enable_vip = fields.Boolean(string='Activer le système VIP', default=True)
+    vip_point_ratio = fields.Float(
+        string='Points par 100 DZD', default=1.0,
+        help='Nombre de points gagnés pour chaque 100 DZD dépensés.')
+    vip_point_value = fields.Float(
+        string='Valeur du point (DZD)', default=1.0,
+        help='Valeur monétaire d\'un point lors de l\'utilisation.')
+
+    _unique_config = models.Constraint('UNIQUE(company_id)', 'Une seule configuration par société est autorisée.')
 
     @api.model
     def get_current_config(self):

@@ -51,6 +51,10 @@ class BarberSession(models.Model):
         string='Total Carte', compute='_compute_totals', store=True)
     total_mobile = fields.Float(
         string='Total Mobile', compute='_compute_totals', store=True)
+    total_points_earned = fields.Float(
+        string='Points gagnés', compute='_compute_totals', store=True)
+    total_points_used = fields.Float(
+        string='Points utilisés', compute='_compute_totals', store=True)
 
     # ─── Statut ───────────────────────────────────────────────────────────────
     state = fields.Selection([
@@ -75,25 +79,27 @@ class BarberSession(models.Model):
             else:
                 session.duration = 0.0
 
-    @api.depends('order_ids', 'order_ids.amount_total',
+    @api.depends('order_ids', 'order_ids.amount_total', 'order_ids.points_used', 'order_ids.points_earned',
                  'order_ids.state', 'order_ids.payment_method')
     def _compute_totals(self):
         for session in self:
             paid = session.order_ids.filtered(lambda o: o.state == 'paid')
             session.order_count = len(paid)
             session.total_revenue = sum(paid.mapped('amount_total'))
+            session.total_points_earned = sum(paid.mapped('points_earned'))
+            session.total_points_used = sum(paid.mapped('points_used'))
             session.total_cash = sum(
                 paid.filtered(
                     lambda o: o.payment_method == 'cash'
-                ).mapped('amount_total'))
+                ).mapped('amount_paid')) # Use amount_paid here as it's the real cash
             session.total_card = sum(
                 paid.filtered(
                     lambda o: o.payment_method == 'card'
-                ).mapped('amount_total'))
+                ).mapped('amount_paid'))
             session.total_mobile = sum(
                 paid.filtered(
                     lambda o: o.payment_method == 'mobile'
-                ).mapped('amount_total'))
+                ).mapped('amount_paid'))
 
     @api.depends('cash_in', 'total_cash')
     def _compute_cash_out(self):
